@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'B20 Sans';
+    src: url('/public/fonts/b20sans.eot');
+    src: url('/public/fonts/b20sans.eot?#iefix') format('embedded-opentype'),
+         url('/public/fonts/b20sans.woff') format('woff'),
+         url('/public/fonts/b20sans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'aeromatics_b';
+    src: url('/public/fonts/aero_matics_bold.eot');
+    src: url('/public/fonts/aero_matics_bold.eot?#iefix') format('embedded-opentype'),
+         url('/public/fonts/aero_matics_bold.woff') format('woff'),
+         url('/public/fonts/aero_matics_bold.ttf') format('truetype');
+}
+
+::-webkit-input-placeholder {color:#737373; font-weight: bold;}
+::-moz-placeholder          {color:#737373; font-weight: bold;}/* Firefox 19+ */
+:-moz-placeholder           {color:#737373; font-weight: bold;}/* Firefox 18- */
+:-ms-input-placeholder      {color:#737373; font-weight: bold;}
+
+body {background: url(../i/bg.png);}
+
+.navbar-inverse .navbar-nav > li > a {color: #fff;}
+.navbar-inverse .navbar-nav > li > a:hover {color: #B95A5A;}
+
+#logo img {margin: 5px;}
+.slider {margin-top: 52px; box-shadow: 0 10px 6px -6px #222222;}
+#zakaz {overflow: hidden; margin-top: 13px; box-shadow: 0 10px 6px -6px #222222;}
+.zakaz-top {background: #222222; overflow: hidden; cursor: default;}
+.zakaz-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.zakaz-body {background: #fff; overflow: hidden; padding: 20px;}
+.zakaz-body input {width:100%; padding: 10px; margin-bottom: 15px; border: 2px solid #B95A5A; border-radius: 5px;}
+.zakaz-body select {width:100%; padding: 10px; margin-bottom: 15px; border: 2px solid #B95A5A; border-radius: 5px;}
+.zakaz-body textarea {width:100%; padding: 10px; margin-bottom: 15px; height: 150px; resize: none; border: 2px solid #B95A5A; border-radius: 5px;}
+.zakaz-body a {width: 100%;}
+.zakaz-body p {font-size: 20px; font-family: 'B20 Sans'; font-weight: bold;}
+.zakaz-body img {width: 100%;}
+.zakaz-body .btn {margin-bottom: 10px;}
+
+#zakaz-info {overflow: hidden; margin-top: 13px; box-shadow: 0 10px 6px -6px #222222;}
+.zakaz-info-top {background: #222222; overflow: hidden; cursor: default;}
+.zakaz-info-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.zakaz-info-body {background: #fff; overflow: hidden; padding: 20px;}
+
+#pay {overflow: hidden; margin-top: 13px; margin-bottom: 13px; box-shadow: 0 10px 6px -6px #222222;}
+.pay-top {background: #222222; overflow: hidden; cursor: default;}
+.pay-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.pay-body {background: #fff; overflow: hidden; padding: 20px;}
+.pay-body a {width: 100%;}
+.pay-body p {font-weight: bold; font-size: 20px; font-family: 'B20 Sans';}
+.pay-body .btn {margin-bottom: 10px;}
+.pay-body b {font-size: 18px; color: red;}
+.pay-body input {width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #B95A5A; border-radius: 5px;}
+.map img {width: 100%; float: right; margin-top: 65px;}
+.map-info {margin-top: 60px; padding: 10px; text-align: center;}
+.map-info h3 {font-size: 40px; font-family: 'aeromatics_b'; }
+.map-info p {font-size: 30px; font-family: 'aeromatics_b'; margin-top: 110px; text-align: left;}
+
+#about {overflow: hidden; margin-top: 13px; box-shadow: 0 10px 6px -6px #222222; margin-top: 65px;}
+.about-top {background: #222222; overflow: hidden; cursor: default;}
+.about-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.about-body {background: #fff; overflow: hidden; padding: 20px; text-align: center;}
+.about-company {text-align: center;}
+.about-company p {font-family: 'B20 Sans'; font-size: 20px;}
+.about-company img {margin-bottom: 20px; width: 100%;}
+.about-body p {font-weight: bold; font-size: 20px; text-align: left;}
+
+.operator {margin-top: 13px; float: left; margin-bottom: 13px; box-shadow: 0 10px 6px -6px #222222; margin-right: 10px;}
+.operator img {width: 200px;}
+.contact {float: left; margin-top: 13px;}
+.contact img {width: 100%;}
+
+
+#punkt-vidachi {overflow: hidden; box-shadow: 0 10px 6px -6px #222222; clear: both;}
+.punkt-vidachi-top {background: #222222; overflow: hidden; cursor: default;}
+.punkt-vidachi-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.punkt-vidachi-body {background: #fff; overflow: hidden; padding: 20px; height: 373px;}
+.punkt-vidachi-body img {width: 100%; margin-bottom: 10px;}
+.punkt-vidachi-body p {font-family: 'B20 Sans'; font-size: 18px; font-weight: bold;}
+
+#comment {overflow: hidden; margin-top: 15px; box-shadow: 0 10px 6px -6px #222222;}
+.comment-top {background: #222222; overflow: hidden; cursor: default;}
+.comment-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.comment-body {background: #fff; overflow: hidden; padding: 20px;}
+.comment-body input {width:100%; padding: 10px; margin-bottom: 15px; border: 2px solid #B95A5A; border-radius: 5px;}
+.comment-body textarea {width:100%; padding: 10px; margin-bottom: 15px; height: 150px; resize: none; border: 2px solid #B95A5A; border-radius: 5px;}
+.comment-body .comment-msg {float: left; width: 100%; overflow: scroll; max-height: 342px; height: 342px; overflow-x: hidden;}
+.comment-body .comment-msg .msg {border-top: 3px solid #1f1f1f; border-bottom: 3px dashed #B95A5A; margin-bottom: 20px; padding: 10px; margin-top: 10px; background: #FCCCD1;}
+.comment-body .comment-msg .msg b {font-family: 'aeromatics_b'; color: #1f1f1f; font-size: 20px; padding: 6px; background: #ABA8A8; cursor: default; border-top: 3px solid #1f1f1f; box-shadow: 0 10px 6px -6px #1f1f1f;}
+.comment-body .comment-msg .msg p {font-family: 'B20 Sans'; font-weight: bold; font-size: 19px; margin-top: 20px;}
+.comment-body .comment-msg .msg span {font-weight: bold;}
+
+#partnership {overflow: hidden; margin-top: 60px; box-shadow: 0 10px 6px -6px #222222;}
+.partnership-top {background: #222222; overflow: hidden; cursor: default;}
+.partnership-top p {color: #fff; font-size: 20px; margin-left: 10px; font-family: 'B20 Sans'; font-weight: normal;}
+.partnership-body {background: #fff; overflow: hidden; padding: 20px;}
+.partnership-body input {width:100%; padding: 10px; margin-bottom: 15px; border: 2px solid #5cb85c; border-radius: 5px;}
+.partnership-body select {width:100%; padding: 10px; margin-bottom: 15px; border: 2px solid #5cb85c; border-radius: 5px;}
+.partnership-body textarea {width:100%; padding: 10px; margin-bottom: 15px; height: 150px; resize: none; border: 2px solid #5cb85c; border-radius: 5px;}
+.partnership-body a {width: 100%;}
+.partnership-body p {font-weight: bold; font-size: 16px;}
+
+#footer {height: 70px; background: #222222; margin-top: 13px; margin-bottom: 13px; box-shadow: 0 10px 6px -6px #222222; padding: 10px;}
+#footer a {color: #B95A5A; text-decoration: none; font-family: 'aeromatics_b'; letter-spacing: 2px;}
+#footer a:hover {color: #fff;}
+
+.MessageRed {height:50px; background: #801D1D; padding:15px; margin-top: 14px; color: #fff; overflow: hidden; font-family: 'B20 Sans'; font-size: 18px; box-shadow: 0 10px 6px -6px #222222;} 
+.MessageYelloy {height:50px; background: #B25400; padding:15px; margin-top: 14px; color: #fff; overflow: hidden; font-family: 'B20 Sans'; font-size: 18px; box-shadow: 0 10px 6px -6px #222222;}
+.MessageGreen {height:50px; background: #11A338; padding:15px; margin-top: 14px; color: #fff; overflow: hidden; font-family: 'B20 Sans'; font-size: 18px; box-shadow: 0 10px 6px -6px #222222;}
+
+.cost-parts {float: right;} 
+.navbar-right img {margin-top: -16px; margin-bottom: -15px;}
+
+.schetchik {float: right; margin-top: 10px;}

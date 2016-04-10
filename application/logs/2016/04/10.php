@@ -1,0 +1,38 @@
+<?php defined('SYSPATH') OR die('No direct script access.'); ?>
+
+2016-04-10 11:34:46 --- CRITICAL: ErrorException [ 8 ]: Undefined index: product_name ~ APPPATH\views\crm\order_info.php [ 80 ] in Z:\home\daauto.lan\www\application\views\crm\order_info.php:80
+2016-04-10 11:34:46 --- DEBUG: #0 Z:\home\daauto.lan\www\application\views\crm\order_info.php(80): Kohana_Core::error_handler(8, 'Undefined index...', 'Z:\home\daauto....', 80, Array)
+#1 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(61): include('Z:\home\daauto....')
+#2 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(348): Kohana_View::capture('Z:\home\daauto....', Array)
+#3 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(228): Kohana_View->render()
+#4 Z:\home\daauto.lan\www\application\views\crm\template.php(99): Kohana_View->__toString()
+#5 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(61): include('Z:\home\daauto....')
+#6 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(348): Kohana_View::capture('Z:\home\daauto....', Array)
+#7 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(228): Kohana_View->render()
+#8 Z:\home\daauto.lan\www\system\classes\Kohana\Response.php(160): Kohana_View->__toString()
+#9 Z:\home\daauto.lan\www\application\classes\Controller\Crm.php(158): Kohana_Response->body(Object(View))
+#10 Z:\home\daauto.lan\www\system\classes\Kohana\Controller.php(84): Controller_Crm->action_order()
+#11 [internal function]: Kohana_Controller->execute()
+#12 Z:\home\daauto.lan\www\system\classes\Kohana\Request\Client\Internal.php(97): ReflectionMethod->invoke(Object(Controller_Crm))
+#13 Z:\home\daauto.lan\www\system\classes\Kohana\Request\Client.php(114): Kohana_Request_Client_Internal->execute_request(Object(Request), Object(Response))
+#14 Z:\home\daauto.lan\www\system\classes\Kohana\Request.php(990): Kohana_Request_Client->execute(Object(Request))
+#15 Z:\home\daauto.lan\www\index.php(119): Kohana_Request->execute()
+#16 {main} in Z:\home\daauto.lan\www\application\views\crm\order_info.php:80
+2016-04-10 11:35:20 --- CRITICAL: ErrorException [ 8 ]: Undefined variable: customerSales ~ APPPATH\views\crm\order_info.php [ 112 ] in Z:\home\daauto.lan\www\application\views\crm\order_info.php:112
+2016-04-10 11:35:20 --- DEBUG: #0 Z:\home\daauto.lan\www\application\views\crm\order_info.php(112): Kohana_Core::error_handler(8, 'Undefined varia...', 'Z:\home\daauto....', 112, Array)
+#1 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(61): include('Z:\home\daauto....')
+#2 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(348): Kohana_View::capture('Z:\home\daauto....', Array)
+#3 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(228): Kohana_View->render()
+#4 Z:\home\daauto.lan\www\application\views\crm\template.php(99): Kohana_View->__toString()
+#5 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(61): include('Z:\home\daauto....')
+#6 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(348): Kohana_View::capture('Z:\home\daauto....', Array)
+#7 Z:\home\daauto.lan\www\system\classes\Kohana\View.php(228): Kohana_View->render()
+#8 Z:\home\daauto.lan\www\system\classes\Kohana\Response.php(160): Kohana_View->__toString()
+#9 Z:\home\daauto.lan\www\application\classes\Controller\Crm.php(158): Kohana_Response->body(Object(View))
+#10 Z:\home\daauto.lan\www\system\classes\Kohana\Controller.php(84): Controller_Crm->action_order()
+#11 [internal function]: Kohana_Controller->execute()
+#12 Z:\home\daauto.lan\www\system\classes\Kohana\Request\Client\Internal.php(97): ReflectionMethod->invoke(Object(Controller_Crm))
+#13 Z:\home\daauto.lan\www\system\classes\Kohana\Request\Client.php(114): Kohana_Request_Client_Internal->execute_request(Object(Request), Object(Response))
+#14 Z:\home\daauto.lan\www\system\classes\Kohana\Request.php(990): Kohana_Request_Client->execute(Object(Request))
+#15 Z:\home\daauto.lan\www\index.php(119): Kohana_Request->execute()
+#16 {main} in Z:\home\daauto.lan\www\application\views\crm\order_info.php:112

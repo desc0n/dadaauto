@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'GNUTypewriter';
+    src: local('GNUTypewriter'),
+        url('/public/fonts/gnutypewriter.woff2') format('woff2'),
+        url('/public/fonts/gnutypewriter.woff') format('woff'),
+        url('/public/fonts/gnutypewriter.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
