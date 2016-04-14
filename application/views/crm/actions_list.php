@@ -6,6 +6,33 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
+        <form class="form-container" method="get">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class='input-group date' id='start'>
+                            <input type='text' class="form-control"  name="start" value="<?=Arr::get($get, 'start', date('d.m.Y'));?>"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class='input-group date' id='end'>
+                            <input type='text' class="form-control"  name="end" value="<?=Arr::get($get, 'end', date('d.m.Y'));?>"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-2">
+                    <button class="btn btn-default">Фильтровать</button>
+                </div><!-- /.col-lg-2 -->
+            </div><!-- /.row -->
+        </form>
         <div class="panel panel-default">
             <div class="panel-heading">
                 Список событий

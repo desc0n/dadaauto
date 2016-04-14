@@ -6,7 +6,8 @@ class Controller_Crm extends Controller
     {
         return View::factory('crm/template')
             ->set('get', $_GET)
-            ->set('post', $_POST);
+            ->set('post', $_POST)
+        ;
     }
 
 	public function action_index()
@@ -134,7 +135,8 @@ class Controller_Crm extends Controller
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/actions_list')
-            ->set('actionsList', $adminModel->findAllActions())
+            ->set('actionsList', $adminModel->findAllActions($this->request->query('start'), $this->request->query('end')))
+            ->set('get', $_GET)
         ;
 
         $this->response->body($template);
@@ -147,9 +149,31 @@ class Controller_Crm extends Controller
         /** @var $orderModel Model_Order */
         $orderModel = Model::factory('Order');
 
-        $template = $this->getBaseTemplate();
-
         $orderId = $this->request->param('id');
+
+        if (Arr::get($_POST, 'newProduct') !== null) {
+            $adminModel->addOrderProduct(
+                $orderId,
+                $this->request->post('newProductName'),
+                $this->request->post('newProductQuantity'),
+                $this->request->post('newProductPrice')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (Arr::get($_POST, 'productId') !== null) {
+            $adminModel->setOrderProduct(
+                $this->request->post('productId'),
+                $this->request->post('productName'),
+                $this->request->post('productQuantity'),
+                $this->request->post('productPrice')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/order_info')
             ->set('orderData', $orderModel->getOrderData($orderId))

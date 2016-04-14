@@ -116,7 +116,7 @@ class Model_Admin extends Kohana_Model
             ->execute();
     }
 
-    public function findAllActions()
+    public function findAllActions($start = null, $end = null)
     {
         return DB::query(Database::SELECT, "
             (
@@ -137,6 +137,7 @@ class Model_Admin extends Kohana_Model
                     ON `acm`.`id` = `cal`.`communication_method`
                 INNER JOIN `actions__type` `at`
                     ON `at`.`id` = `cal`.`type`
+                WHERE `cal`.`date` BETWEEN :start AND :end
                 ORDER BY `cal`.`date` DESC
             )
             UNION
@@ -152,11 +153,17 @@ class Model_Admin extends Kohana_Model
                 (SELECT `name` FROM `actions__type` WHERE `id` = 1) as `communication_method_name`,
                 (SELECT `name` FROM `actions__type` WHERE `id` = 1)  as `type_name`
                 FROM `orders` `o`
+                WHERE `o`.`date` BETWEEN :start AND :end
                 ORDER BY `o`.`date` DESC
             )
-        ")
-            ->execute()
-            ->as_array();
+            ")
+                ->parameters([
+                    ':start' => $start == null ? date('Y-m-d 00:00:00') : date('Y-m-d 00:00:00', strtotime($start)),
+                    ':end' => $end == null ? date('Y-m-d 23:59:59') : date('Y-m-d 23:59:59', strtotime($end)),
+                ])
+                ->execute()
+                ->as_array()
+            ;
     }
 
     public function findActionBy($params = [])
@@ -534,5 +541,23 @@ class Model_Admin extends Kohana_Model
             ->execute();
     }
 
+    public function addOrderProduct($orderId, $part = '', $quantity = 1, $price = 0)
+    {
+        $res = DB::insert('orders__parts', ['order_id', 'part', 'quantity', 'price'])
+            ->values([$orderId, $part, $quantity, $price])
+            ->execute()
+        ;
+
+        return Arr::get($res, 0);
+    }
+
+    public function setOrderProduct($productId, $part = '', $quantity = 1, $price = 0)
+    {
+        DB::update('orders__parts')
+            ->set(['part' => $part, 'quantity' => $quantity, 'price' => $price])
+            ->where('id', '=', $productId)
+            ->execute()
+        ;
+    }
 }
 ?>

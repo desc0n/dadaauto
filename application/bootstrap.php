@@ -171,7 +171,7 @@ Route::set('order', 'order', [
         'action'     => 'order',
     ));
 
-Route::set('default', '(<controller>(/<action>(/<id>)))',array('id' =>'[0-9a-z_]+'))
+Route::set('default', '(<controller>(/<action>(/<id>)))',array('id' =>'[0-9a-zA-Z-_.]+'))
 	->defaults(array(
 		'controller' => 'index',
 		'action'     => 'index',

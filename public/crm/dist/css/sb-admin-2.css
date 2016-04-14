@@ -369,6 +369,7 @@ table.dataTable thead .sorting:after {
 }
 
 #addProductModal .form-group .form-control,
+#redactProductModal .form-group .form-control,
 #addSaleModal .form-group .form-control {
     display: inline-block;
 }
@@ -404,4 +405,14 @@ table.dataTable thead .sorting:after {
     .col-lg-3-important {
         width: 25% !important;
     }
+    .col-lg-2-important {
+        width: 16.66666667% !important;
+    }
+    .col-lg-1-important {
+        width: 8.33333333% !important;
+    }
+}
+
+.form-container {
+    margin-bottom: 20px;
 }

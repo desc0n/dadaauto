@@ -8,16 +8,16 @@
     <div class="col-lg-12">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
-            <li class="active">
+            <li>
                 <a href="#data" data-toggle="tab">Данные</a>
             </li>
-            <li>
+            <li class="active">
                 <a href="#products" data-toggle="tab">Товары</a>
             </li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane fade in active" id="data">
+            <div class="tab-pane fade" id="data">
                 <div class="panel-body">
                     <div class="panel panel-default">
                     <div class="panel-heading">
@@ -55,7 +55,7 @@
                 </div>
                 <!-- /.panel -->
             </div>
-            <div class="tab-pane fade" id="products">
+            <div class="tab-pane fade in active" id="products">
                 <div class="panel-body">
                     <div class="form-group">
                         <button class="btn btn-default" data-toggle="modal" data-target="#addProductModal">Добавить товар <i class="fa fa-plus fa-fw"></i></button>
@@ -69,16 +69,20 @@
                                 <thead>
                                 <tr>
                                     <th>Название товара</th>
-                                    <th>Количество</th>
+                                    <th>Кол-во</th>
                                     <th>Цена</th>
+                                    <th>Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?foreach ($orderProducts as $product) {?>
-                                    <tr>
-                                        <td><?=$product['part'];?></td>
-                                        <td><?=$product['quantity'];?></td>
-                                        <td><?=$product['price'];?></td>
+                                    <tr id="rowProduct<?=$product['id'];?>">
+                                        <td class="product-name-cell"><?=$product['part'];?></td>
+                                        <td class="text-center product-quantity-cell"><?=$product['quantity'];?></td>
+                                        <td class="text-center product-price-cell"><?=$product['price'];?></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-default redactProductBtn" data-id="<?=$product['id'];?>" title="Редактировать"><i class="fa fa-pencil fa-fw"></i></button>
+                                        </td>
                                     </tr>
                                 <?}?>
                                 </tbody>
@@ -209,20 +213,48 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="addProductModalLabel">Добавление отслеживаемого товара</h4>
+                <h4 class="modal-title" id="addProductModalLabel">Добавление товара</h4>
             </div>
             <div class="modal-body">
                 <form role="form" method="post" id="addProductForm">
+                    <label for="newProductName">Товар</label>
                     <div class="form-group">
-                        <label for="newProductCode">Товар</label>
-                        <input class="col-lg-3-important form-control" id="newProductCode" name="newProductCode" placeholder="Код товара" autocomplete="off">
-                        <input class="col-lg-7-important form-control" id="newProductName" name="newProductName" placeholder="Название товара" autocomplete="off">
+                        <input class="col-lg-7-important form-control" id="newProductName" name="newProductName" placeholder="Название" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="newProductQuantity" name="newProductQuantity" placeholder="Кол-во" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="newProductPrice" name="newProductPrice" placeholder="Цена" autocomplete="off">
                     </div>
+                    <input type="hidden" name="newProduct">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary" onclick="addProductForm.submit();">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="redactProductModal" tabindex="-1" role="dialog" aria-labelledby="redactProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="redactProductModalLabel">Редактирование товара</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="post" id="redactProductForm">
+                    <label for="productName">Товар</label>
+                    <div class="form-group">
+                        <input class="col-lg-7-important form-control" id="productName" name="productName" placeholder="Название" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity" placeholder="Кол-во" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="productPrice" name="productPrice" placeholder="Цена" autocomplete="off">
+                    </div>
+                    <input type="hidden" name="productId" id="productId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" onclick="redactProductForm.submit();">Сохранить изменения</button>
             </div>
         </div>
     </div>

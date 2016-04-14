@@ -223,6 +223,14 @@ $(function() {
 
         $('#newSaleProductList').append(html);
     });
+
+    $('.redactProductBtn').click(function(){
+        $('#redactProductModal #productId').val($(this).data('id'));
+        $('#redactProductModal #productName').val($('#rowProduct' + $(this).data('id') + ' .product-name-cell').text());
+        $('#redactProductModal #productQuantity').val($('#rowProduct' + $(this).data('id') + ' .product-quantity-cell').text());
+        $('#redactProductModal #productPrice').val($('#rowProduct' + $(this).data('id') + ' .product-price-cell').text());
+        $('#redactProductModal').modal('toggle');
+    });
 });
 
 function initTypeahead($newSaleProductName) {
