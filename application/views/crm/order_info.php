@@ -6,90 +6,75 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="#data" data-toggle="tab">Данные</a>
-            </li>
-            <li class="active">
-                <a href="#products" data-toggle="tab">Товары</a>
-            </li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div class="tab-pane fade" id="data">
+
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Основные данные
+                    <a href="#" class="pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil fa-fw"></i></a>
+                </div>
                 <div class="panel-body">
-                    <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Основные данные
-                        <a href="#" class="pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil fa-fw"></i></a>
-                    </div>
-                    <div class="panel-body">
-                        <h4>Имя</h4>
-                        <p><?=Arr::get($orderData, 'client_name');?></p>
-                        <h4>Контактная информация</h4>
-                        <address>
-                            <p>
-                                <strong>
-                                    Адрес: <?=Arr::get($orderData, 'client_address');?>
-                                </strong>
-                                <br>
-                            </p>
-                            <p>
-                                <strong>
-                                    ТК: <?=Arr::get($orderData, 'client_tk');?>
-                                </strong>
-                                <br>
-                            </p>
-                            <abbr>Телефон:</abbr> +7 (<?=substr(Arr::get($orderData, 'client_phone'), 0, 3);?>) <?=substr(Arr::get($orderData, 'client_phone'), 3);?>
-                        </address>
-                        <h4>Интернет-контакты</h4>
-                        <address>
-                            <strong>E-mail</strong>
+                    <h4>Контактная информация</h4>
+                    <address>
+                        <p>
+                            <strong>Имя: </strong> <?=Arr::get($orderData, 'client_name');?>
                             <br>
+                        </p>
+                        <p>
+                            <strong>Адрес: </strong> <?=Arr::get($orderData, 'client_address');?>
+                            <br>
+                        </p>
+                        <p>
+                            <strong>ТК: </strong> <?=Arr::get($orderData, 'client_tk');?>
+                            <br>
+                        </p>
+                        <p>
+                            <strong>Телефон: </strong> +7 (<?=substr(Arr::get($orderData, 'client_phone'), 0, 3);?>) <?=substr(Arr::get($orderData, 'client_phone'), 3);?>
+                        </p>
+                    </address>
+                    <h4>Интернет-контакты</h4>
+                    <address>
+                        <strong>E-mail</strong>
                             <a href="mailto:<?=Arr::get($orderData, 'client_email');?>"><?=Arr::get($orderData, 'client_email');?></a>
-                        </address>
-                    </div>
-                    <!-- /.panel-body -->
+                        <br>
+                    </address>
                 </div>
-                </div>
-                <!-- /.panel -->
+                <!-- /.panel-body -->
             </div>
-            <div class="tab-pane fade in active" id="products">
-                <div class="panel-body">
-                    <div class="form-group">
-                        <button class="btn btn-default" data-toggle="modal" data-target="#addProductModal">Добавить товар <i class="fa fa-plus fa-fw"></i></button>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Список товаров
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th>Название товара</th>
-                                    <th>Кол-во</th>
-                                    <th>Цена</th>
-                                    <th>Действия</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?foreach ($orderProducts as $product) {?>
-                                    <tr id="rowProduct<?=$product['id'];?>">
-                                        <td class="product-name-cell"><?=$product['part'];?></td>
-                                        <td class="text-center product-quantity-cell"><?=$product['quantity'];?></td>
-                                        <td class="text-center product-price-cell"><?=$product['price'];?></td>
-                                        <td class="text-center">
-                                            <button class="btn btn-default redactProductBtn" data-id="<?=$product['id'];?>" title="Редактировать"><i class="fa fa-pencil fa-fw"></i></button>
-                                        </td>
-                                    </tr>
-                                <?}?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        </div>
+        <!-- /.panel -->
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Список товаров
                 </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                        <tr>
+                            <th>Название товара</th>
+                            <th>Кол-во</th>
+                            <th>Цена</th>
+                            <th>Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?foreach ($orderProducts as $product) {?>
+                            <tr id="rowProduct<?=$product['id'];?>">
+                                <td class="product-name-cell"><?=$product['part'];?></td>
+                                <td class="text-center product-quantity-cell"><?=$product['quantity'];?></td>
+                                <td class="text-center product-price-cell"><?=$product['price'];?></td>
+                                <td class="text-center">
+                                    <button class="btn btn-default redactProductBtn" data-id="<?=$product['id'];?>" title="Редактировать"><i class="fa fa-pencil fa-fw"></i></button>
+                                </td>
+                            </tr>
+                        <?}?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" data-toggle="modal" data-target="#addProductModal">Добавить товар <i class="fa fa-plus fa-fw"></i></button>
             </div>
         </div>
     </div>
@@ -104,42 +89,24 @@
                 <h4 class="modal-title" id="myModalLabel">Редактирование данных клиента</h4>
             </div>
             <div class="modal-body">
-                <form role="form" id="redactCustomerForm" method="post">
+                <form role="form" id="redactOrderClientForm" method="post">
                     <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Наименование *</label>
+                        <div class="col-lg-12">
+                            <label>Имя *</label>
                             <label class="control-label hide" for="redactName" id="redactNameError">Поле пустое</label>
-                            <input class="form-control" name="name" id="redactName" value="<?=Arr::get($orderData, 'name');?>">
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Дата первого контакта</label>
-                            <input class="form-control" disabled value="<?=date('d.m.Y', strtotime(Arr::get($orderData, 'date', '0000-00-00')));?>">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Почтовый индекс</label>
-                            <input class="form-control" name="postindex" value="<?=Arr::get($orderData, 'postindex');?>">
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Регион</label>
-                            <input class="form-control" name="region" value="<?=Arr::get($orderData, 'region');?>">
+                            <input class="form-control" name="name" id="redactName" value="<?=Arr::get($orderData, 'client_name');?>">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-12">
                             <label>Город</label>
-                            <input class="form-control" name="city" value="<?=Arr::get($orderData, 'city');?>">
+                            <textarea class="form-control" name="city"><?=Arr::get($orderData, 'client_address');?></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Улица</label>
-                            <input class="form-control" name="street" value="<?=Arr::get($orderData, 'street');?>">
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Дом</label>
-                            <input class="form-control" name="house" value="<?=Arr::get($orderData, 'house');?>">
+                        <div class="col-lg-12">
+                            <label>Транспортная компания</label>
+                            <input class="form-control" name="tk" value="<?=Arr::get($orderData, 'client_tk');?>">
                         </div>
                     </div>
                     <div class="form-group">
@@ -148,22 +115,22 @@
                             <label class="control-label hide" for="redactPhone" id="redactPhoneError">Длина номера 10 цифр</label>
                             <div class="input-group">
                                 <span class="input-group-addon">+7</span>
-                                <input class="form-control" id="redactPhone" disabled value="<?=Arr::get($orderData, 'phone');?>">
-                                <input type="hidden" name="phone" value="<?=Arr::get($orderData, 'phone');?>">
+                                <input class="form-control" id="redactPhone" disabled value="<?=Arr::get($orderData, 'client_phone');?>">
+                                <input type="hidden" name="phone" value="<?=Arr::get($orderData, 'client_phone');?>">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
                         <div class="col-lg-6">
                             <label>E-mail</label>
-                            <input class="form-control" name="email" value="<?=Arr::get($orderData, 'email');?>">
+                            <input class="form-control" name="email" value="<?=Arr::get($orderData, 'client_email');?>">
                         </div>
                     </div>
+                    <input type="hidden" name="order_id" value="<?=Arr::get($orderData, 'order_id');?>">
+                    <input type="hidden" name="redactOrderClient" value="1">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" id="redactNewCustomer">Сохранить изменения</button>
+                <button type="button" class="btn btn-primary" id="redactOrderClient">Сохранить изменения</button>
             </div>
         </div>
     </div>
@@ -190,7 +157,7 @@
                         <label for="newActionType">Тип события</label>
                         <select class="form-control" id="newActionType" name="newActionType">
                             <?foreach ($actionTypes as $type) {?>
-                            <option value="<?=$type['id'];?>"><?=$type['name'];?></option>
+                                <option value="<?=$type['id'];?>"><?=$type['name'];?></option>
                             <?}?>
                         </select>
                     </div>
@@ -305,47 +272,47 @@
                     <div class="form-group">
                         <label>Товар</label>
                         <p id="newSaleProductList">
-                            <p id="row-1" class="newSaleProductRow">
-                                <input type="hidden" id="newSaleProductCode1" name="newSaleProductCode[]">
-                                <input class="col-lg-12-important form-control newSaleProductName"
-                                       id="newSaleProductName1" data-row="1" name="newSaleProductName[]"
-                                       placeholder="Название товара" autocomplete="off">
-                            </p>
-                            <script>
-                                $('#newSaleProductName1').typeahead({
-                                    source: function (item, process) {
-                                        return $.get('/ajax/find_product_by_item', {
-                                            item: item
-                                        }, function (response) {
-                                            var data = [];
-                                            var parseResponse = JSON.parse(response);
+                        <p id="row-1" class="newSaleProductRow">
+                            <input type="hidden" id="newSaleProductCode1" name="newSaleProductCode[]">
+                            <input class="col-lg-12-important form-control newSaleProductName"
+                                   id="newSaleProductName1" data-row="1" name="newSaleProductName[]"
+                                   placeholder="Название товара" autocomplete="off">
+                        </p>
+                        <script>
+                            $('#newSaleProductName1').typeahead({
+                                source: function (item, process) {
+                                    return $.get('/ajax/find_product_by_item', {
+                                        item: item
+                                    }, function (response) {
+                                        var data = [];
+                                        var parseResponse = JSON.parse(response);
 
-                                            for (var i in parseResponse) {
-                                                data.push(parseResponse[i].item_id + '#' + parseResponse[i].full_size + ' ' + parseResponse[i].model);
-                                            }
+                                        for (var i in parseResponse) {
+                                            data.push(parseResponse[i].item_id + '#' + parseResponse[i].full_size + ' ' + parseResponse[i].model);
+                                        }
 
-                                            return process(data);
-                                        });
-                                    },
-                                    highlighter: function (item) {
-                                        var parts = item.split('#');
-                                        var html = '<div class="typeahead">' +
-                                            '<div class="pull-left margin-small">' +
-                                            '<div class="text-left"><strong>' + parts[0] + '#' + parts[1] + '</strong></div>' +
-                                            '</div>' +
-                                            '<div class="clearfix"></div>' +
-                                            '</div>';
+                                        return process(data);
+                                    });
+                                },
+                                highlighter: function (item) {
+                                    var parts = item.split('#');
+                                    var html = '<div class="typeahead">' +
+                                        '<div class="pull-left margin-small">' +
+                                        '<div class="text-left"><strong>' + parts[0] + '#' + parts[1] + '</strong></div>' +
+                                        '</div>' +
+                                        '<div class="clearfix"></div>' +
+                                        '</div>';
 
-                                        return html;
-                                    },
-                                    updater: function (item) {
-                                        var parts = item.split('#');
-                                        $('#newSaleProductCode1').val(parts[0]);
+                                    return html;
+                                },
+                                updater: function (item) {
+                                    var parts = item.split('#');
+                                    $('#newSaleProductCode1').val(parts[0]);
 
-                                        return parts[1];
-                                    }
-                                });
-                            </script>
+                                    return parts[1];
+                                }
+                            });
+                        </script>
                         </p>
                         <p>
                             <button class="btn btn-success" type="button" id="addSaleProductRow">Добавить строку  <i class="fa fa-indent fa-fw"></i></button>

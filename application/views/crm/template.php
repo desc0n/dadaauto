@@ -49,7 +49,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="">Admin v2.0</a>
+            <a class="navbar-brand" href="/crm"><img class="logo" src="/public/i/nasait.png"></a>
         </div>
         <!-- /.navbar-header -->
 

@@ -151,6 +151,12 @@ class Controller_Crm extends Controller
 
         $orderId = $this->request->param('id');
 
+        if ($this->request->post('redactOrderClient') !== null) {
+            $adminModel->setOrderClient($_POST);
+
+            HTTP::redirect($this->request->referrer());
+        }
+
         if (Arr::get($_POST, 'newProduct') !== null) {
             $adminModel->addOrderProduct(
                 $orderId,

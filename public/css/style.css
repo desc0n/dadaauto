@@ -90,7 +90,6 @@ body {
 	width: 200px;
 	background: #198;
 	display: block;
-	/*background: url('/public/i/logo.jpg') no-repeat;*/
     background: url('/public/i/nasait.png') no-repeat;
     background-position: center center;
 }

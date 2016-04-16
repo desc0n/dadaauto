@@ -355,6 +355,7 @@ table.dataTable thead .sorting:after {
 
 #addCustomerForm .form-group,
 #redactCustomerForm .form-group,
+#redactOrderClientForm .form-group,
 #addProductModal .form-group {
     min-height: 60px;
 }
@@ -415,4 +416,10 @@ table.dataTable thead .sorting:after {
 
 .form-container {
     margin-bottom: 20px;
+}
+
+.logo {
+    height: 30px;
+    margin-left: 30px;
+    margin-top: -5px;
 }

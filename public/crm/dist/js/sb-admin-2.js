@@ -106,6 +106,21 @@ $(function() {
         redactCustomerForm.submit();
     });
 
+    $('#redactOrderClient').click(function () {
+        if ($('#redactName').val().length == 0) {
+            var errorText = '<div class="alert alert-danger"><strong>Не указано имя!</strong> ' +
+                'Проверьте зополненность поля имя.</div>';
+            $('#redactName').parent().attr('class', 'col-lg-6 has-error');
+            $('#redactNameError').attr('class', 'control-label');
+            $('#errorModalBody').html(errorText);
+            $('#errorModal').modal();
+
+            return false;
+        }
+
+        redactOrderClientForm.submit();
+    });
+
     $('#newProductCode').typeahead({
         source: function (item, process) {
             return $.get('/crm/ajax/find_product_by_item', {

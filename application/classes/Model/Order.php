@@ -7,7 +7,14 @@ class Model_Order extends Kohana_Model
 {
     public function getOrderData($orderId)
     {
-        return DB::select(['oc.name', 'client_name'])
+        return DB::select(
+                ['o.id', 'order_id'],
+                ['oc.name', 'client_name'],
+                ['oc.address', 'client_address'],
+                ['oc.tk', 'client_tk'],
+                ['oc.phone', 'client_phone'],
+                ['oc.email', 'client_email']
+            )
             ->from(['orders', 'o'])
             ->join(['orders__clients', 'oc'])
             ->on('oc.order_id', '=', 'o.id')
