@@ -372,7 +372,16 @@ table.dataTable thead .sorting:after {
 #addProductModal .form-group .form-control,
 #redactProductModal .form-group .form-control,
 #addSaleModal .form-group .form-control {
-    display: inline-block;
+    display: table-cell;
+    margin-left: 8px;
+}
+
+#productRow1 .form-control {
+    margin-left: 6px !important;
+}
+
+#productRow1 .btn {
+    margin-left: 3px !important;
 }
 
 @media (min-width: 1200px) {

@@ -541,6 +541,16 @@ class Model_Admin extends Kohana_Model
             ->execute();
     }
 
+    /**
+     * @param $orderId
+     * @param string $part
+     * @param int $quantity
+     * @param int $price
+     *
+     * @return int
+     * int
+     * @throws Kohana_Exception
+     */
     public function addOrderProduct($orderId, $part = '', $quantity = 1, $price = 0)
     {
         $res = DB::insert('orders__parts', ['order_id', 'part', 'quantity', 'price'])
@@ -551,13 +561,31 @@ class Model_Admin extends Kohana_Model
         return Arr::get($res, 0);
     }
 
-    public function setOrderProduct($productId, $part = '', $quantity = 1, $price = 0)
+    /**
+     * @param int $orderId
+     * @param array $productIdArr
+     * @param array $partArr
+     * @param array $quantityArr
+     * @param array $priceArr
+     *
+     * @return void
+     */
+    public function setOrderProduct($orderId, $productIdArr, $partArr = [], $quantityArr = [], $priceArr = [])
     {
-        DB::update('orders__parts')
-            ->set(['part' => $part, 'quantity' => $quantity, 'price' => $price])
-            ->where('id', '=', $productId)
-            ->execute()
-        ;
+        foreach ($productIdArr as $i => $productId) {
+            $check = DB::select()->from('orders__parts')->where('id', '=', $productId)->execute()->current();
+
+            if ($check) {
+                DB::update('orders__parts')
+                    ->set(['part' => Arr::get($partArr, $i, ''), 'quantity' => Arr::get($quantityArr, $i, 1), 'price' => Arr::get($priceArr, $i, 0)])
+                    ->where('id', '=', $productId)
+                    ->execute();
+
+                continue;
+            }
+
+            $this->addOrderProduct($orderId, Arr::get($partArr, $i, ''), Arr::get($quantityArr, $i, 1), Arr::get($priceArr, $i, 0));
+        }
     }
 }
 ?>

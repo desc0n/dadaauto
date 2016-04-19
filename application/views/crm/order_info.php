@@ -136,45 +136,6 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addActionModal" tabindex="-1" role="dialog" aria-labelledby="addActionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="addActionModalLabel">Добавление события</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" method="post" id="addActionForm">
-                    <div class="form-group">
-                        <label for="newActionCommunicationMethod">Способ связи</label>
-                        <select class="form-control" id="newActionCommunicationMethod" name="newActionCommunicationMethod">
-                            <?foreach ($communicationMethods as $method) {?>
-                                <option value="<?=$method['id'];?>"><?=$method['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="newActionType">Тип события</label>
-                        <select class="form-control" id="newActionType" name="newActionType">
-                            <?foreach ($actionTypes as $type) {?>
-                                <option value="<?=$type['id'];?>"><?=$type['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="newActionText">Описание события</label>
-                        <textarea class="form-control" id="newActionText" name="newActionText" rows="5"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" onclick="addActionForm.submit();">Сохранить изменения</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -210,119 +171,20 @@
             </div>
             <div class="modal-body">
                 <form role="form" method="post" id="redactProductForm">
-                    <label for="productName">Товар</label>
-                    <div class="form-group">
-                        <input class="col-lg-7-important form-control" id="productName" name="productName" placeholder="Название" autocomplete="off">
-                        <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity" placeholder="Кол-во" autocomplete="off">
-                        <input class="col-lg-2-important form-control" id="productPrice" name="productPrice" placeholder="Цена" autocomplete="off">
+                    <label>Товар</label>
+                    <div class="form-group product-row" id="productRow1">
+                        <input class="col-lg-6-important form-control" id="productName" name="productName[]" placeholder="Название" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">
+                        <input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">
+                        <button class="btn btn-default col-lg-1-important" disabled><i class="fa fa-remove fa-fw"></i></button>
+                        <input type="hidden" name="productId[]" id="productId">
                     </div>
-                    <input type="hidden" name="productId" id="productId">
                 </form>
+                <button type="button" class="btn btn-default" id="addProductRowBtn">Добавить позицию <i class="fa fa-plus fa-fw"></i></button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary" onclick="redactProductForm.submit();">Сохранить изменения</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="addSaleModal" tabindex="-1" role="dialog" aria-labelledby="addSaleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="addSaleModalLabel">Добавление документа</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" method="post" id="addSaleForm">
-                    <div class="form-group">
-                        <label for="newSaleMethod">Способ оплаты</label>
-                        <select class="form-control" id="newSaleMethod" name="newSaleMethod">
-                            <?foreach ($saleMethods as $method) {?>
-                                <option value="<?=$method['id'];?>"><?=$method['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="newSaleType">Тип документа</label>
-                        <select class="form-control" id="newSaleType" name="newSaleType">
-                            <?foreach ($saleTypes as $type) {?>
-                                <option value="<?=$type['id'];?>"><?=$type['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="newSaleDelivery">Тип доставки</label>
-                        <select class="form-control" id="newSaleDelivery" name="newSaleDelivery">
-                            <?foreach ($saleDeliveries as $delivery) {?>
-                                <option value="<?=$delivery['id'];?>"><?=$delivery['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="newSaleReserve">Резерв</label>
-                        <select class="form-control" id="newSaleReserve" name="newSaleReserve">
-                            <?foreach ($saleReserves as $reserve) {?>
-                                <option value="<?=$reserve['id'];?>"><?=$reserve['name'];?></option>
-                            <?}?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Товар</label>
-                        <p id="newSaleProductList">
-                        <p id="row-1" class="newSaleProductRow">
-                            <input type="hidden" id="newSaleProductCode1" name="newSaleProductCode[]">
-                            <input class="col-lg-12-important form-control newSaleProductName"
-                                   id="newSaleProductName1" data-row="1" name="newSaleProductName[]"
-                                   placeholder="Название товара" autocomplete="off">
-                        </p>
-                        <script>
-                            $('#newSaleProductName1').typeahead({
-                                source: function (item, process) {
-                                    return $.get('/ajax/find_product_by_item', {
-                                        item: item
-                                    }, function (response) {
-                                        var data = [];
-                                        var parseResponse = JSON.parse(response);
-
-                                        for (var i in parseResponse) {
-                                            data.push(parseResponse[i].item_id + '#' + parseResponse[i].full_size + ' ' + parseResponse[i].model);
-                                        }
-
-                                        return process(data);
-                                    });
-                                },
-                                highlighter: function (item) {
-                                    var parts = item.split('#');
-                                    var html = '<div class="typeahead">' +
-                                        '<div class="pull-left margin-small">' +
-                                        '<div class="text-left"><strong>' + parts[0] + '#' + parts[1] + '</strong></div>' +
-                                        '</div>' +
-                                        '<div class="clearfix"></div>' +
-                                        '</div>';
-
-                                    return html;
-                                },
-                                updater: function (item) {
-                                    var parts = item.split('#');
-                                    $('#newSaleProductCode1').val(parts[0]);
-
-                                    return parts[1];
-                                }
-                            });
-                        </script>
-                        </p>
-                        <p>
-                            <button class="btn btn-success" type="button" id="addSaleProductRow">Добавить строку  <i class="fa fa-indent fa-fw"></i></button>
-                        </p>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" onclick="addSaleForm.submit();">Сохранить изменения</button>
             </div>
         </div>
     </div>

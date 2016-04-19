@@ -121,6 +121,18 @@ $(function() {
         redactOrderClientForm.submit();
     });
 
+    $('#addProductRowBtn').click(function () {
+        var rowLength = $('.product-row').length * 1;
+
+        $('#redactProductForm').append('<div class="form-group product-row" id="productRow' + (rowLength + 1) + '">' +
+            '<input class="col-lg-6-important form-control" id="productName" name="productName[]" placeholder="Название" autocomplete="off">' +
+            '<input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">' +
+            '<input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">' +
+            '<button class="btn btn-default col-lg-1-important form-control" onclick="$(\'#productRow' + (rowLength + 1) + '\').remove();"><i class="fa fa-remove fa-fw"></i></button>' +
+            '<input type="hidden" name="productId[]" id="productId">' +
+        '</div>');
+    });
+
     $('#newProductCode').typeahead({
         source: function (item, process) {
             return $.get('/crm/ajax/find_product_by_item', {

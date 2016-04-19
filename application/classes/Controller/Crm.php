@@ -170,6 +170,7 @@ class Controller_Crm extends Controller
 
         if (Arr::get($_POST, 'productId') !== null) {
             $adminModel->setOrderProduct(
+                $orderId,
                 $this->request->post('productId'),
                 $this->request->post('productName'),
                 $this->request->post('productQuantity'),
