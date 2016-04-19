@@ -13,7 +13,7 @@ class Controller_Crm extends Controller
 	public function action_index()
 	{
         if (!Auth::instance()->logged_in('admin')) {
-            HTTP::redirect('/login');
+            HTTP::redirect('/crm/login');
         }
 
         if (Auth::instance()->logged_in() && isset($_POST['logout'])) {
@@ -40,7 +40,7 @@ class Controller_Crm extends Controller
 	{
         if (!Auth::instance()->logged_in() && isset($_POST['login'])) {
             Auth::instance()->login($_POST['username'], $_POST['password'],true);
-            HTTP::redirect('/');
+            HTTP::redirect('/crm');
         }
 
 		$template = View::factory('crm/login')

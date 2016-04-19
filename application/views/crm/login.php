@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
+    <title>CRM</title>
     <!-- Bootstrap Core CSS -->
-    <link href="/public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="/public/crm/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- MetisMenu CSS -->
-    <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="/public/dist/css/sb-admin-2.css" rel="stylesheet">
-
+    <link href="/public/crm/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <!-- Custom Fonts -->
-    <link href="/public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/public/crm/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- DataTables CSS -->
+    <link href="/public/crm/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="/public/crm/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/public/crm/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!--Bootstrap Datepicker CSS-->
+    <link href="/public/crm/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,6 +29,13 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!--Bootstrap Datepicker JavaScript-->
+    <script src="/public/crm/js/moment-with-locales.js"></script>
+    <script src="/public/crm/js/bootstrap-datetimepicker.js"></script>
+    <!--Bootstrap Typeahead JavaScript-->
+    <script src="/public/crm/js/bootstrap3-typeahead.min.js"></script>
 </head>
 
 <body>
@@ -60,18 +66,14 @@
     </div>
 </div>
 
-<!-- jQuery -->
-<script src="/public/bower_components/jquery/dist/jquery.min.js"></script>
-
 <!-- Bootstrap Core JavaScript -->
-<script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
+<script src="/public/crm/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Metis Menu Plugin JavaScript -->
-<script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
+<script src="/public/crm/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 <!-- Custom Theme JavaScript -->
-<script src="/public/dist/js/sb-admin-2.js"></script>
-
+<script src="/public/crm/dist/js/sb-admin-2.js"></script>
+<!-- DataTables JavaScript -->
+<script src="/public/crm/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/public/crm/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 </body>
-
 </html>
