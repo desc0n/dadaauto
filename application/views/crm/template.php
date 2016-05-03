@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>CRM</title>
+    <link href="/public/i/fav.png"  sizes="38x38" rel="shortcut icon" type="image/png" />
     <!-- Bootstrap Core CSS -->
     <link href="/public/crm/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- MetisMenu CSS -->

@@ -40,7 +40,7 @@ class Controller_Admin extends Controller {
 			if (empty($page)){
 				//$admin_content = Auth::instance()->logged_in('admin') ? $admin_content : '';
 			} else if ($page == 'registration') {
-				$admin_content = View::factory('registration')
+				$admin_content = View::factory('crm/registration')
 					->set('username', Arr::get($_POST,'username',''))
 					->set('email', Arr::get($_POST,'email',''))
 					->set('error', '');
