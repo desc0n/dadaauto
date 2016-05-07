@@ -11,7 +11,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <div class='input-group date' id='start'>
-                            <input type='text' class="form-control"  name="start" value="<?=Arr::get($get, 'start', date('d.m.Y'));?>"/>
+                            <input type='text' class="form-control"  name="start" value="<?=$start;?>"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -21,7 +21,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <div class='input-group date' id='end'>
-                            <input type='text' class="form-control"  name="end" value="<?=Arr::get($get, 'end', date('d.m.Y'));?>"/>
+                            <input type='text' class="form-control"  name="end" value="<?=$end;?>"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -67,55 +67,40 @@
             </div>
             <!-- /.panel-body -->
         </div>
+        <div class="form-group">
+            <button class="btn btn-success" data-toggle="modal" data-target="#addActionModal">Добавить событие <i class="fa fa-plus fa-fw"></i></button>
+        </div>
         <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="addActionModal" tabindex="-1" role="dialog" aria-labelledby="addActionLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Добавление клиента</h4>
+                <h4 class="modal-title" id="addActionLabel">Добавление события</h4>
             </div>
             <div class="modal-body">
-                <form role="form" id="addCustomerForm" method="post">
+                <form role="form" id="addActionForm" method="post">
                     <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Наименование *</label>
-                            <label class="control-label hide" for="newName" id="newNameError">Поле пустое</label>
-                            <input class="form-control" name="name" id="newName">
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Дата первого контакта</label>
-                            <input class="form-control" name="date" id="newDate" value="<?=date('d.m.Y', time());?>">
+                        <legend>Тип события *</legend>
+                        <div class="col-lg-12">
+                            <label class="control-label hide" for="newAction" id="newActionError">Не выбрано</label>
+                            <select class="form-control" name="type" id="newType">
+                                <option value="0">не выбран</option>
+                                <? foreach ($actions as $act) {?>
+                                <option value="<?=$act['id'];?>"><?=$act['name'];?></option>
+                                <?}?>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Почтовый индекс</label>
-                            <input class="form-control" name="postindex">
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Регион</label>
-                            <input class="form-control" name="region">
-                        </div>
-                    </div>
+                    <legend>Клиент</legend>
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label>Город</label>
-                            <input class="form-control" name="city">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-6">
-                            <label>Улица</label>
-                            <input class="form-control" name="street">
-                        </div>
-                            <div class="col-lg-6">
-                            <label>Дом</label>
-                            <input class="form-control" name="house">
+                            <label>Имя *</label>
+                            <label class="control-label hide" for="newName" id="newNameError">Поле пустое</label>
+                            <input class="form-control" name="name" id="newName" value="" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,29 +109,20 @@
                             <label class="control-label hide" for="newPhone" id="newPhoneError">Длина номера 10 цифр</label>
                             <div class="input-group">
                                 <span class="input-group-addon">+7</span>
-                                <input class="form-control" name="phone" id="newPhone" autocomplete="off">
+                                <input class="form-control" id="newPhone" name="phone" value="" autocomplete="off">
                             </div>
                         </div>
-                            <div class="col-lg-6">
-                            <label>Факс</label>
-                            <input class="form-control" name="fax">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <div class="col-lg-6">
                             <label>E-mail</label>
-                            <input class="form-control" name="email">
-                        </div>
-                            <div class="col-lg-6">
-                            <label>Сайт</label>
-                            <input class="form-control" name="site">
+                            <input class="form-control" name="email" id="newEmail" value="">
                         </div>
                     </div>
+                    <input type="hidden" id="customerId" name="customer">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" id="addNewCustomer">Сохранить изменения</button>
+                <button type="button" class="btn btn-primary" id="addNewAction">Сохранить изменения</button>
             </div>
         </div>
     </div>

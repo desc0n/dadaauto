@@ -132,15 +132,36 @@ class Controller_Crm extends Controller
         /** @var $adminModel Model_Admin */
         $adminModel = Model::factory('Admin');
 
+        if (null !== $this->request->post('type')) {
+            $customerId = !empty($this->request->post('customer')) ? $this->request->post('customer') : $adminModel->addCustomer($_POST);
+
+            $adminModel->addAction([
+                'customer_id' => $customerId,
+                'newActionType' => $this->request->post('type'),
+            ]);
+
+            HTTP::redirect($this->request->referrer());
+        }
+        
         $template = $this->getBaseTemplate();
 
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
+
+        $start = null != $this->request->query('start') ? $startDate->format('d.m.Y') : $startDate->modify('- 1 week')->format('d.m.Y');
+        $end = $endDate->format('d.m.Y');
+
         $template->content = View::factory('crm/actions_list')
-            ->set('actionsList', $adminModel->findAllActions($this->request->query('start'), $this->request->query('end')))
+            ->set('actionsList', $adminModel->findAllActions($start, $end))
             ->set('get', $_GET)
+            ->set('start', $start)
+            ->set('end', $end)
+            ->set('actions', $adminModel->findActionsType())
         ;
 
         $this->response->body($template);
     }
+
     public function action_order()
     {
         /** @var $adminModel Model_Admin */
@@ -185,6 +206,68 @@ class Controller_Crm extends Controller
         $template->content = View::factory('crm/order_info')
             ->set('orderData', $orderModel->getOrderData($orderId))
             ->set('orderProducts', $orderModel->getOrderProductsData($orderId))
+            ->set('communicationMethods', $adminModel->findAllCommunicationMethods())
+            ->set('saleMethods', $adminModel->findAllSaleMethods())
+            ->set('saleTypes', $adminModel->findAllSaleTypes())
+            ->set('saleDeliveries', $adminModel->findAllSaleDeliveries())
+            ->set('saleReserves', $adminModel->findAllSaleReserves())
+            ->set('actionTypes', $adminModel->findAllActionTypes())
+        ;
+
+        $this->response->body($template);
+    }
+
+    public function action_action()
+    {
+        /** @var $adminModel Model_Admin */
+        $adminModel = Model::factory('Admin');
+
+        /** @var $actionModel Model_Action */
+        $actionModel = Model::factory('Action');
+
+        $actionId = $this->request->param('id');
+
+        if ($this->request->post('redactActionClient') !== null) {
+            $actionModel->setActionCustomer(
+                $this->request->post('redactActionClient'),
+                $this->request->post('name'),
+                $this->request->post('address'),
+                $this->request->post('tk'),
+                $this->request->post('phone'),
+                $this->request->post('email')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (Arr::get($_POST, 'newProduct') !== null) {
+            $actionModel->addActionProduct(
+                $actionId,
+                $this->request->post('newProductName'),
+                $this->request->post('newProductQuantity'),
+                $this->request->post('newProductPrice')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (Arr::get($_POST, 'productId') !== null) {
+            $actionModel->setActionProduct(
+                $actionId,
+                $this->request->post('productId'),
+                $this->request->post('productName'),
+                $this->request->post('productQuantity'),
+                $this->request->post('productPrice')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/action_info')
+            ->set('actionData', $actionModel->getActionData($actionId))
+            ->set('actionProducts', $actionModel->getActionProductsData($actionId))
             ->set('communicationMethods', $adminModel->findAllCommunicationMethods())
             ->set('saleMethods', $adminModel->findAllSaleMethods())
             ->set('saleTypes', $adminModel->findAllSaleTypes())

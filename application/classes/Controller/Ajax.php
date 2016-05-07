@@ -56,4 +56,13 @@ class Controller_Ajax extends Controller
         $this->response->body($adminModel->addReview($_POST));
     }
 
+
+    public function action_find_customer_by_phone()
+    {
+        /** @var $adminModel Model_Admin */
+        $adminModel = Model::factory('Admin');
+
+        $result = json_encode($adminModel->findCustomerBy($_POST));
+        $this->response->body($result);
+    }
 }

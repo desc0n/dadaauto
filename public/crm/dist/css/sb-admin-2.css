@@ -356,7 +356,9 @@ table.dataTable thead .sorting:after {
 #addCustomerForm .form-group,
 #redactCustomerForm .form-group,
 #redactOrderClientForm .form-group,
-#addProductModal .form-group {
+#redactActionClientForm .form-group,
+#addProductModal .form-group,
+#addActionModal .form-group {
     min-height: 60px;
 }
 
@@ -371,7 +373,8 @@ table.dataTable thead .sorting:after {
 
 #addProductModal .form-group .form-control,
 #redactProductModal .form-group .form-control,
-#addSaleModal .form-group .form-control {
+#addSaleModal .form-group .form-control,
+#addActionModal .form-group .form-control {
     display: table-cell;
     margin-left: 8px;
 }
@@ -431,4 +434,8 @@ table.dataTable thead .sorting:after {
     height: 30px;
     margin-left: 30px;
     margin-top: -5px;
+}
+
+.input-group #newPhone {
+    margin-left: 0 !important;
 }

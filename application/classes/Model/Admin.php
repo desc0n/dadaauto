@@ -33,8 +33,8 @@ class Model_Admin extends Kohana_Model
 
     public function addCustomer($params)
     {
-        $res = DB::query(Database::INSERT, 'INSERT INTO `customers__list` (`manager_id`) VALUES (:manager_id)')
-            ->param(':manager_id', $this->user_id)
+        $res = DB::insert('customers__list', ['manager_id'])
+            ->values([$this->user_id])
             ->execute();
 
         $customerId = Arr::get($res, 0);
@@ -47,18 +47,13 @@ class Model_Admin extends Kohana_Model
     public function setCustomer($customerId, $params)
     {
         DB::query(Database::INSERT, 'INSERT INTO `customers__data`
-            (`customers_id`, `type`, `name`, `postindex`, `region`, `city`, `street`, `house`, `phone`, `fax`, `email`, `site`, `date`)
-            VALUES (:customer_id, :type, :name, :postindex, :region, :city, :street, :house, :phone, :fax, :email, :site, :date)
-            ON DUPLICATE KEY UPDATE `name` = :name, `postindex` = :postindex, `region` = :region, `city` = :city,
-            `street` = :street, `house` = :house, `fax` = :fax, `site` = :site, `email` = :email')
+            (`customers_id`, `type`, `name`, `address`, `phone`, `fax`, `email`, `site`, `date`)
+            VALUES (:customer_id, :type, :name, :address, :phone, :fax, :email, :site, :date)
+            ON DUPLICATE KEY UPDATE `name` = :name, `address` = :address, `fax` = :fax, `site` = :site, `email` = :email')
             ->param(':customer_id', $customerId)
-            ->param(':type', Arr::get($params, 'type'))
+            ->param(':type', Arr::get($params, 'type', 1))
             ->param(':name', Arr::get($params, 'name'))
-            ->param(':postindex', Arr::get($params, 'postindex'))
-            ->param(':region', Arr::get($params, 'region'))
-            ->param(':city', Arr::get($params, 'city'))
-            ->param(':street', Arr::get($params, 'street'))
-            ->param(':house', Arr::get($params, 'house'))
+            ->param(':address', Arr::get($params, 'address'))
             ->param(':phone', Arr::get($params, 'phone'))
             ->param(':fax', Arr::get($params, 'fax'))
             ->param(':site', Arr::get($params, 'site'))
@@ -103,6 +98,9 @@ class Model_Admin extends Kohana_Model
         return [];
     }
 
+    /**
+     * @param array $params
+     */
     public function addAction($params = [])
     {
         DB::query(Database::INSERT, 'INSERT INTO `customers__actions_list`
@@ -110,14 +108,18 @@ class Model_Admin extends Kohana_Model
             VALUES (:manager_id, :customer_id, :communication_method, :type, :text, now())')
             ->param(':manager_id', $this->user_id)
             ->param(':customer_id', Arr::get($params, 'customer_id'))
-            ->param(':communication_method', Arr::get($params, 'newActionCommunicationMethod'))
-            ->param(':type', Arr::get($params, 'newActionType'))
+            ->param(':communication_method', Arr::get($params, 'newActionCommunicationMethod', 1))
+            ->param(':type', Arr::get($params, 'newActionType', 1))
             ->param(':text', preg_replace('/[\'\"]+/', '', Arr::get($params, 'newActionText')))
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function findAllActions($start = null, $end = null)
     {
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $start ? $start : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $end ? $end : date('d.m.Y'));
+
         return DB::query(Database::SELECT, "
             (
                 SELECT `cal`.`id`,
@@ -158,8 +160,8 @@ class Model_Admin extends Kohana_Model
             )
             ")
                 ->parameters([
-                    ':start' => $start == null ? date('Y-m-d 00:00:00') : date('Y-m-d 00:00:00', strtotime($start)),
-                    ':end' => $end == null ? date('Y-m-d 23:59:59') : date('Y-m-d 23:59:59', strtotime($end)),
+                    ':start' => $startDate->format('Y-m-d 00:00:00'),
+                    ':end' => $endDate->format('Y-m-d 23:59:59'),
                 ])
                 ->execute()
                 ->as_array()
@@ -586,6 +588,26 @@ class Model_Admin extends Kohana_Model
 
             $this->addOrderProduct($orderId, Arr::get($partArr, $i, ''), Arr::get($quantityArr, $i, 1), Arr::get($priceArr, $i, 0));
         }
+    }
+
+    /**
+     * @param null|int $id
+     * 
+     * @return array
+     */
+    public function findActionsType($id = null)
+    {
+        $query = DB::select()
+            ->from('actions__type')
+            ->where('', '', 1)
+        ;
+
+        $query = null !== $id ? $query->and_where('id', '=', $id) : $query;
+        
+        return $query
+            ->execute()
+            ->as_array()
+        ;
     }
 }
 ?>
