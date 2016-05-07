@@ -66,11 +66,6 @@ class Model_Admin extends Kohana_Model
     {
         return DB::query(Database::SELECT, "
             SELECT `cd`.*,
-            IF (`cd`.`postindex` != '', CONCAT(`cd`.`postindex`, ' '), '') as `listview_postindex`,
-            IF (`cd`.`region` != '', CONCAT(`cd`.`region`, ' '), '') as `listview_region`,
-            IF (`cd`.`city` != '', CONCAT('г. ', `cd`.`city`, ' '), '') as `listview_city`,
-            IF (`cd`.`street` != '', CONCAT('ул. ', `cd`.`street`, ' '), '') as `listview_street`,
-            IF (`cd`.`house` != '', CONCAT('д. ', `cd`.`house`, ' '), '') as `listview_house`,
             `ct`.`name` as `type_name`,
             `up`.`name` as `manager_name`
             FROM `customers__data` `cd`
