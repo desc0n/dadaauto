@@ -105,7 +105,7 @@ class Model_Admin extends Kohana_Model
             ->param(':customer_id', Arr::get($params, 'customer_id'))
             ->param(':communication_method', Arr::get($params, 'newActionCommunicationMethod', 1))
             ->param(':type', Arr::get($params, 'newActionType', 1))
-            ->param(':text', preg_replace('/[\'\"]+/', '', Arr::get($params, 'newActionText')))
+            ->param(':text', preg_replace('/[\'\"]+/', '', Arr::get($params, 'newActionText', 'Заказ')))
             ->execute()
         ;
     }
