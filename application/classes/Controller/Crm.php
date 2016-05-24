@@ -135,12 +135,12 @@ class Controller_Crm extends Controller
         if (null !== $this->request->post('type')) {
             $customerId = !empty($this->request->post('customer')) ? $this->request->post('customer') : $adminModel->addCustomer($_POST);
 
-            $adminModel->addAction([
+            $actionId = $adminModel->addAction([
                 'customer_id' => $customerId,
                 'newActionType' => $this->request->post('type'),
             ]);
 
-            HTTP::redirect($this->request->referrer());
+            HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
         
         $template = $this->getBaseTemplate();
@@ -276,6 +276,38 @@ class Controller_Crm extends Controller
             ->set('actionTypes', $adminModel->findAllActionTypes())
         ;
 
+        $this->response->body($template);
+    }
+    
+    public function action_store_upload()
+    {
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/store_products_list')
+        ;
+        $this->response->body($template);
+    }
+    
+    public function action_store_distributors()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        if (Arr::get($_POST, 'name') !== null) {
+            $productModel->addDistributor(
+                $this->request->post('name'),
+                $this->request->post('type')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+        
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/store_distributors_list')
+            ->set('distributorsData', $productModel->findDistributors())
+        ;
+        
         $this->response->body($template);
     }
 }

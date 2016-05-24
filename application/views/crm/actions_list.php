@@ -135,3 +135,10 @@
         });
     });
 </script>
+<?if (Arr::get($get, 'new_order') === 'true') {?>
+<script>
+    $(document).ready(function () {
+        $('#addActionModal').modal('toggle');
+    });
+</script>
+<?}?>

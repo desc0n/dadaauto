@@ -95,10 +95,12 @@ class Model_Admin extends Kohana_Model
 
     /**
      * @param array $params
+     * 
+     * @return int|null
      */
     public function addAction($params = [])
     {
-        DB::query(Database::INSERT, 'INSERT INTO `customers__actions_list`
+        $res = DB::query(Database::INSERT, 'INSERT INTO `customers__actions_list`
                 (`manager_id`, `customer_id`, `communication_method`, `type`, `text`, `date`)
             VALUES (:manager_id, :customer_id, :communication_method, :type, :text, now())')
             ->param(':manager_id', $this->user_id)
@@ -108,6 +110,8 @@ class Model_Admin extends Kohana_Model
             ->param(':text', preg_replace('/[\'\"]+/', '', Arr::get($params, 'newActionText', 'Заказ')))
             ->execute()
         ;
+        
+        return Arr::get($res, 0);
     }
 
     public function findAllActions($start = null, $end = null)

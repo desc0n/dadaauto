@@ -58,7 +58,27 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href=""><i class="fa fa-dashboard fa-fw"></i> Панель управления</a>
+                        <a href="/crm/actions_list/?new_order=true"><i class="fa fa-file fa-fw"></i> Заказ</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-list fa-fw"></i> События<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/crm/actions_list">Список</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-archive fa-fw"></i> Склад<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/crm/store_distributors">Поставщики</a>
+                            </li>
+                            <li>
+                                <a href="/crm/store_upload">Поступление</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-users fa-fw"></i> Клиенты<span class="fa arrow"></span></a>
@@ -71,18 +91,6 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-list fa-fw"></i> События<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="/crm/actions_list">Список</a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
-                    <li>
-                        <a href="/crm/sales"><i class="fa fa-money fa-fw"></i> Продажи</a>
                     </li>
                 </ul>
             </div>

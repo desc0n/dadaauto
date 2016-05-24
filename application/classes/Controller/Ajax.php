@@ -56,13 +56,21 @@ class Controller_Ajax extends Controller
         $this->response->body($adminModel->addReview($_POST));
     }
 
-
     public function action_find_customer_by_phone()
     {
         /** @var $adminModel Model_Admin */
         $adminModel = Model::factory('Admin');
 
         $result = json_encode($adminModel->findCustomerBy($_POST));
+        $this->response->body($result);
+    }
+
+    public function action_find_brand_by_subbrand()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        $result = json_encode($productModel->findBrands(null, null, strtoupper($this->request->post('brand'))));
         $this->response->body($result);
     }
 }

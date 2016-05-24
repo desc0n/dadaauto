@@ -154,78 +154,7 @@ $(function() {
         '</div>');
     });
 
-    // $('#newProductCode').typeahead({
-    //     source: function (item, process) {
-    //         return $.get('/crm/ajax/find_product_by_item', {
-    //             item: item
-    //         }, function (response) {
-    //             var data = [];
-    //             var parseResponse = JSON.parse(response);
-    //
-    //             for (var i in parseResponse) {
-    //                 data.push(parseResponse[i].item_id + '#' + parseResponse[i].full_size + ' ' + parseResponse[i].model);
-    //             }
-    //
-    //             return process(data);
-    //         });
-    //     },
-    //     highlighter: function (item) {
-    //         var parts = item.split('#');
-    //         var html = '<div class="typeahead">' +
-    //             '<div class="pull-left margin-small">' +
-    //             '<div class="text-left"><strong>' + parts[0] + '</strong></div>' +
-    //             '</div>' +
-    //             '<div class="clearfix"></div>' +
-    //             '</div>';
-    //
-    //         return html;
-    //     },
-    //     updater: function (item) {
-    //         var parts = item.split('#');
-    //         $('#newProductName').val(parts[1]);
-    //
-    //         return parts[0];
-    //     }
-    // });
-    //
-    // $('#newProductName').typeahead({
-    //     source: function (name, process) {
-    //         return $.get('/crm/ajax/find_product_by_name', {
-    //             name: name
-    //         }, function (response) {
-    //             var data = [];
-    //             var parseResponse = JSON.parse(response);
-    //
-    //             for (var i in parseResponse) {
-    //                 data.push(parseResponse[i].item_id + '#' + parseResponse[i].full_size + ' ' + parseResponse[i].model);
-    //             }
-    //
-    //             return process(data);
-    //         });
-    //     },
-    //     highlighter: function (name) {
-    //         var parts = name.split('#');
-    //         var html = '<div class="typeahead">' +
-    //             '<div class="pull-left margin-small">' +
-    //             '<div class="text-left"><strong>' + parts[1] + '</strong></div>' +
-    //             '</div>' +
-    //             '<div class="clearfix"></div>' +
-    //             '</div>';
-    //
-    //         return html;
-    //     },
-    //     updater: function (name) {
-    //         var parts = name.split('#');
-    //         $('#newProductCode').val(parts[0]);
-    //
-    //         return parts[1];
-    //     }
-    // });
-
     $('#dataTables-sales').dataTable();
-
-
-
 
     $('#addSaleProductRow').click(function(){
         var rowCount = $('.newSaleProductRow').length;
@@ -282,7 +211,7 @@ $(function() {
 
     $('#addActionModal #newPhone').typeahead({
         source: function (item, process) {
-            return $.get('/ajax/find_customer_by_phone', {
+            return $.post('/ajax/find_customer_by_phone', {
                 phone: item
             }, function (response) {
                 var data = [];
@@ -345,6 +274,39 @@ $(function() {
         addActionForm.submit();
     });
 
+    $('#addStoreProductModal #newBrand').typeahead({
+        source: function (item, process) {
+            return $.post('/ajax/find_brand_by_subbrand', {
+                brand: item
+            }, function (response) {
+                var data = [];
+                var parseResponse = JSON.parse(response);
+
+                for (var i in parseResponse) {
+                    data.push(parseResponse[i].id + '#' + parseResponse[i].name);
+                }
+
+                return process(data);
+            });
+        },
+        highlighter: function (item) {
+            var parts = item.split('#');
+            return '<div class="typeahead">' +
+                '<div class="pull-left margin-small">' +
+                '<div class="text-left"><strong>' + parts[1] + '</strong></div>' +
+                '</div>' +
+                '<div class="clearfix"></div>' +
+                '</div>';
+        },
+        updater: function (item) {
+            var parts = item.split('#');
+
+            $('#newBrand').parent().parent().attr('class', 'col-lg-6');
+            $('#newBrandError').attr('class', 'control-label hide');
+
+            return parts[1];
+        }
+    });
 });
 
 function initTypeahead($newSaleProductName) {
