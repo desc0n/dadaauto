@@ -281,9 +281,32 @@ class Controller_Crm extends Controller
     
     public function action_store_upload()
     {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+        
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        if (Arr::get($_POST, 'name') !== null) {
+            $storeModel->addRemain(
+                $this->request->post('brand'),
+                $this->request->post('article'),
+                $this->request->post('name'),
+                $this->request->post('quantity'),
+                $this->request->post('price'),
+                $this->request->post('distributor_id'),
+                $this->request->post('product_type'),
+                $this->request->post('place')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+        
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/store_products_list')
+            ->set('distributorsData', $productModel->findDistributors())
+            ->set('productsType', $storeModel->productsType)
         ;
         $this->response->body($template);
     }
