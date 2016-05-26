@@ -115,7 +115,7 @@ $(function() {
     $('#redactOrderClient').click(function () {
         if ($('#redactName').val().length == 0) {
             var errorText = '<div class="alert alert-danger"><strong>Не указано имя!</strong> ' +
-                'Проверьте зополненность поля имя.</div>';
+                'Проверьте заполненность поля имя.</div>';
             $('#redactName').parent().attr('class', 'col-lg-6 has-error');
             $('#redactNameError').attr('class', 'control-label');
             $('#errorModalBody').html(errorText);
@@ -130,7 +130,7 @@ $(function() {
     $('#redactActionClient').click(function () {
         if ($('#redactName').val().length == 0) {
             var errorText = '<div class="alert alert-danger"><strong>Не указано имя!</strong> ' +
-                'Проверьте зополненность поля имя.</div>';
+                'Проверьте заполненность поля имя.</div>';
             $('#redactName').parent().attr('class', 'col-lg-6 has-error');
             $('#redactNameError').attr('class', 'control-label');
             $('#errorModalBody').html(errorText);
@@ -274,7 +274,7 @@ $(function() {
         addActionForm.submit();
     });
 
-    $('#addStoreProductModal #newBrand').typeahead({
+    $('#addStoreProductModal #newStoreProductBrand').typeahead({
         source: function (item, process) {
             return $.post('/ajax/find_brand_by_subbrand', {
                 brand: item
@@ -307,8 +307,58 @@ $(function() {
             return parts[1];
         }
     });
+
+    $('#addNewStoreProduct').click(function () {
+        if (checkErrorField('#newStoreProductName', 12, 'Не указано название товара!', 'Проверьте заполненность поля название товара.')) {
+            return false;
+        }
+
+        if (checkErrorField('#newStoreProductBrand', 6, 'Не указан бренд!', 'Проверьте заполненность поля бренд.')) {
+            return false;
+        }
+
+        if (checkErrorField('#newStoreProductArticle', 6, 'Не указан артикул!', 'Проверьте заполненность поля артикул.')) {
+            return false;
+        }
+
+        if (checkErrorField('#newStoreProductDistributor', 12, 'Не указан поставщик!', 'Проверьте заполненность поля поставщик.')) {
+            return false;
+        }
+
+        if (checkErrorField('#newStoreProductPrice', 6, 'Не указана цена!', 'Проверьте заполненность поля цена.')) {
+            return false;
+        }
+
+        if (checkErrorField('#newStoreProductQuantity', 6, 'Не указано количество!', 'Проверьте заполненность поля количество.')) {
+            return false;
+        }
+
+        addStoreProductForm.submit();
+    });
+
+    $('.check-field').keyup(function () {
+        if($(this).val().length != 0) {
+            $($(this).id + 'Error').attr('class', 'control-label hide');
+            $(this).parent().attr('class', 'col-lg-' + $(this).data('col-num'));
+        } else {
+            $($(this).id + 'Error').attr('class', 'control-label');
+            $(this).parent().attr('class', 'col-lg-' + $(this).data('col-num') + ' has-error');
+        }
+    });
 });
 
+function checkErrorField(id, colNum, strong, text) {
+    if ($(id).val() == '') {
+        $(id).parent().attr('class', 'col-lg-' + colNum + ' has-error');
+        $(id + 'Error').attr('class', 'control-label');
+        $('#errorModalBody').html('<div class="alert alert-danger"><strong>' + strong + '</strong> ' + text + '</div>');
+        $('#errorModal').modal();
+
+        return true;
+    }
+
+    return false;
+}
 function initTypeahead($newSaleProductName) {
     $newSaleProductName.typeahead({
         source: function (item, process) {

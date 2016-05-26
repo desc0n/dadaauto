@@ -307,6 +307,7 @@ class Controller_Crm extends Controller
         $template->content = View::factory('crm/store_products_list')
             ->set('distributorsData', $productModel->findDistributors())
             ->set('productsType', $storeModel->productsType)
+            ->set('storeRemain', $storeModel->findRemain())
         ;
         $this->response->body($template);
     }
