@@ -9,6 +9,11 @@ class Model_Product extends Kohana_Model
         'realtime'  => 'В наличии',
         'offer'     => 'Под заказ'
     ];
+    
+    public $distributorsMarkupsType = [
+        'new'       => 'Наценка на новые запчасти',
+        'contract'  => 'Наценка на контрактные запчасти'
+    ];
 
     /**
      * @param null|int $id
@@ -128,5 +133,63 @@ class Model_Product extends Kohana_Model
         ;
 
         return Arr::get($res, 0);
+    }
+
+    /**
+     * @param null|int $id
+     * @param null|int $distributorId
+     * @param null|string $type
+     *
+     * @return array
+     */
+    public function findDistributorsMarkups($id = null, $distributorId = null, $type = null)
+    {
+        /** @var Database_Query_Builder_Select $query */
+        $query = DB::select('pdm.*', ['pd.name', 'distributor_name'], ['pd.id', 'distributor_id'])
+            ->from(['products__distributors', 'pd'])
+            ->join(['products__distributors_markups', 'pdm'], 'left')
+            ->on('pdm.distributor_id', '=', 'pd.id')
+            ->where('', '', 1)
+        ;
+
+        $query = null !== $id ? $query->and_where('pdm.id', '=', $id) : $query;
+        $query = null !== $distributorId ? $query->and_where('pd.id', '=', $distributorId) : $query;
+        $query = null !== $type ? $query->and_where('pdm.type', '=', $type) : $query;
+
+        return $query
+            ->order_by('pd.id', 'asc')
+            ->execute()
+            ->as_array()
+        ;
+    }
+
+    /**
+     * @param null|int $distributorId
+     * @param null|string $type
+     * @param null|int $markup
+     *
+     * @return array
+     */
+    public function setMarkup($distributorId, $type, $markup)
+    {
+        $markupData = $this->findDistributorsMarkups(null, $distributorId, $type);
+
+        $markupId = Arr::get(Arr::get($markupData, 0, []), 'id');
+
+        if (null === $markupId) {
+            $res = DB::insert('products__distributors_markups', ['distributor_id', 'type', 'markup'])
+                ->values([$distributorId, $type, $markup])
+                ->execute();
+
+            $markupId = Arr::get($res, 0);
+        } else {
+            DB::update('products__distributors_markups')
+                ->set(['markup' => $markup])
+                ->where('id', '=', $markupId)
+                ->execute()
+            ;
+        }
+
+        return $markupId;
     }
 }

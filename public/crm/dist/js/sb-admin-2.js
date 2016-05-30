@@ -345,6 +345,14 @@ $(function() {
             $(this).parent().attr('class', 'col-lg-' + $(this).data('col-num') + ' has-error');
         }
     });
+    
+    $('.markup-type').change(function () {
+        setMarkup($(this).data('key'));
+    });
+
+    $('.markup-value').blur(function () {
+        setMarkup($(this).data('key'));
+    });
 });
 
 function checkErrorField(id, colNum, strong, text) {
@@ -358,6 +366,20 @@ function checkErrorField(id, colNum, strong, text) {
     }
 
     return false;
+}
+
+function setMarkup(key) {
+    var distributor_id = $('#row' + key + ' .markup-distributor').val();
+    var type = $('#row' + key + ' .markup-type').val();
+    var markup = $('#row' + key + ' .markup-value').val();
+
+    $.ajax({
+        type: 'POST', url: '/ajax/set_markup', async: true, data: {
+            distributor_id: distributor_id,
+            type: type,
+            markup: markup
+        }
+    });
 }
 function initTypeahead($newSaleProductName) {
     $newSaleProductName.typeahead({

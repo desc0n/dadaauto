@@ -73,4 +73,19 @@ class Controller_Ajax extends Controller
         $result = json_encode($productModel->findBrands(null, null, strtoupper($this->request->post('brand'))));
         $this->response->body($result);
     }
+
+    public function action_set_markup()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        $result = json_encode(
+            $productModel->setMarkup(
+                $this->request->post('distributor_id'),
+                $this->request->post('type'),
+                $this->request->post('markup')
+            )
+        );
+        $this->response->body($result);
+    }
 }

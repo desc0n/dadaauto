@@ -334,4 +334,26 @@ class Controller_Crm extends Controller
         
         $this->response->body($template);
     }
+    public function action_markups_list()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        if (Arr::get($_POST, 'name') !== null) {
+            $productModel->addDistributor(
+                $this->request->post('name'),
+                $this->request->post('type')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+        
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/markups_list')
+            ->set('distributorsMarkupsData', $productModel->findDistributorsMarkups())
+        ;
+        
+        $this->response->body($template);
+    }
 }
