@@ -74,6 +74,15 @@ class Controller_Ajax extends Controller
         $this->response->body($result);
     }
 
+    public function action_find_productname_by_subproductname()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        $result = json_encode($productModel->findProduct(null, null, null, null, $this->request->post('name')));
+        $this->response->body($result);
+    }
+
     public function action_set_markup()
     {
         /** @var Model_Product $productModel */

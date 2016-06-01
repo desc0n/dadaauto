@@ -145,8 +145,8 @@ $(function() {
     $('#addProductRowBtn').click(function () {
         var rowLength = $('.product-row').length * 1;
 
-        $('#redactProductForm').append('<div class="form-group product-row" id="productRow' + (rowLength + 1) + '">' +
-            '<input class="col-lg-6-important form-control" id="productName" name="productName[]" placeholder="Название" autocomplete="off">' +
+        $('#redactProductForm').append('<div class="form-group product-row" id="productRow' + (rowLength + 1) + '" data-row="' + (rowLength + 1) + '">' +
+            '<input class="col-lg-6-important form-control" id="productName" name="productName[]" onkeyup="initTypeaheadProductName($(this));" onchange="getCurrentTypeahead($(this));" placeholder="Название" autocomplete="off">' +
             '<input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">' +
             '<input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">' +
             '<button class="btn btn-default col-lg-1-important form-control" onclick="$(\'#productRow' + (rowLength + 1) + '\').remove();"><i class="fa fa-remove fa-fw"></i></button>' +
@@ -381,6 +381,7 @@ function setMarkup(key) {
         }
     });
 }
+
 function initTypeahead($newSaleProductName) {
     $newSaleProductName.typeahead({
         source: function (item, process) {
@@ -402,6 +403,54 @@ function initTypeahead($newSaleProductName) {
     return false;
 }
 
+function initTypeaheadProductName($input)
+{
+    $input.typeahead({
+        source: function (item, process) {
+            return $.post('/ajax/find_productname_by_subproductname', {
+                name: item
+            }, function (response) {
+                var data = [];
+                var parseResponse = JSON.parse(response);
+
+                for (var i in parseResponse) {
+                    data.push(parseResponse[i].id + '#' + parseResponse[i].name);
+                }
+
+                return process(data);
+            });
+        },
+        highlighter: function (item) {
+            var parts = item.split('#');
+
+            return '<div class="typeahead">' +
+                '<div class="pull-left margin-small">' +
+                '<div class="text-left"><strong>' + parts[1] + '</strong></div>' +
+                '</div>' +
+                '<div class="clearfix"></div>' +
+                '</div>';
+        },
+        updater: function (item) {
+            var parts = item.split('#');
+
+            return parts[1];
+        }
+    });
+}
+
+function getCurrentTypeahead($input) 
+{
+    var current = $input.typeahead("getActive");
+    var parts = current.split('#');
+
+    if (parts.length < 2) {
+        return false;
+    }
+
+    var row = $input.parent().data('row');
+
+    $('#productRow' + row + ' #productId').val(parts[0]);
+}
 function initChange($newSaleProductName) {
     var current = $newSaleProductName.typeahead("getActive");
     var parts = current.split('#');

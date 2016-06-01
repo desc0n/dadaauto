@@ -198,7 +198,7 @@ class Controller_Crm extends Controller
                 $this->request->post('productPrice')
             );
 
-            HTTP::redirect($this->request->referrer());
+            HTTP::redirect(sprintf('/crm/order/%d', $orderId));
         }
 
         $template = $this->getBaseTemplate();
@@ -212,6 +212,7 @@ class Controller_Crm extends Controller
             ->set('saleDeliveries', $adminModel->findAllSaleDeliveries())
             ->set('saleReserves', $adminModel->findAllSaleReserves())
             ->set('actionTypes', $adminModel->findAllActionTypes())
+            ->set('get', $this->request->query())
         ;
 
         $this->response->body($template);
@@ -237,7 +238,7 @@ class Controller_Crm extends Controller
                 $this->request->post('email')
             );
 
-            HTTP::redirect($this->request->referrer());
+            HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
 
         if (Arr::get($_POST, 'newProduct') !== null) {
@@ -248,7 +249,7 @@ class Controller_Crm extends Controller
                 $this->request->post('newProductPrice')
             );
 
-            HTTP::redirect($this->request->referrer());
+            HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
 
         if (Arr::get($_POST, 'productId') !== null) {
@@ -260,7 +261,7 @@ class Controller_Crm extends Controller
                 $this->request->post('productPrice')
             );
 
-            HTTP::redirect($this->request->referrer());
+            HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
 
         $template = $this->getBaseTemplate();
@@ -274,6 +275,7 @@ class Controller_Crm extends Controller
             ->set('saleDeliveries', $adminModel->findAllSaleDeliveries())
             ->set('saleReserves', $adminModel->findAllSaleReserves())
             ->set('actionTypes', $adminModel->findAllActionTypes())
+            ->set('get', $this->request->query())
         ;
 
         $this->response->body($template);
@@ -334,6 +336,7 @@ class Controller_Crm extends Controller
         
         $this->response->body($template);
     }
+    
     public function action_markups_list()
     {
         /** @var Model_Product $productModel */
@@ -355,5 +358,22 @@ class Controller_Crm extends Controller
         ;
         
         $this->response->body($template);
+    }
+    
+    public function action_quick_sale()
+    {
+        /** @var $adminModel Model_Admin */
+        $adminModel = Model::factory('Admin');
+
+        $customerData = $adminModel->findCustomerBy($adminModel->quickCustomer);
+
+        $customerId = 0 === count($customerData) ? $adminModel->addCustomer($adminModel->quickCustomer) : Arr::get(Arr::get($customerData, 0, []), 'id');
+
+        $actionId = $adminModel->addAction([
+            'customer_id' => $customerId,
+            'newActionType' => 2,
+        ]);
+
+        HTTP::redirect(sprintf('/crm/action/%d/?quick_sale=true', $actionId));
     }
 }

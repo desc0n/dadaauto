@@ -6,7 +6,9 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-
+        <div class="form-group">
+            <button class="btn btn-primary">Сформировать реализацию <i class="fa fa-plus fa-fw"></i></button>
+        </div>
         <div class="panel-body">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -171,8 +173,8 @@
             <div class="modal-body">
                 <form role="form" method="post" id="redactProductForm">
                     <label>Товар</label>
-                    <div class="form-group product-row" id="productRow1">
-                        <input class="col-lg-6-important form-control" id="productName" name="productName[]" placeholder="Название" autocomplete="off">
+                    <div class="form-group product-row" id="productRow1" data-row="1">
+                        <input class="col-lg-6-important form-control" id="productName" name="productName[]" onkeyup="initTypeaheadProductName($(this));" onchange="getCurrentTypeahead($(this));" placeholder="Название" autocomplete="off">
                         <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">
                         <input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">
                         <button class="btn btn-default col-lg-1-important" disabled><i class="fa fa-remove fa-fw"></i></button>
@@ -188,3 +190,10 @@
         </div>
     </div>
 </div>
+<?if (Arr::get($get, 'quick_sale') === 'true') {?>
+    <script>
+        $(document).ready(function () {
+            $('#redactProductModal').modal('toggle');
+        });
+    </script>
+<?}?>

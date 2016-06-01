@@ -5,7 +5,12 @@
  */
 class Model_Admin extends Kohana_Model
 {
-
+    public $quickCustomer = [
+        'name' => 'Розничный клиент',
+        'phone' => '0000000000',
+        'sendMail' => false
+    ];
+    
 	private $user_id;
 
 	public function __construct()
@@ -363,10 +368,13 @@ class Model_Admin extends Kohana_Model
         $this->setOrderPart($params);
         $this->setOrderStatus($params);
 
-        $view = View::factory('add_order_mail')
-            ->set('params', $params);
+        if (Arr::get($params, 'sendMail', true)) {
+            $view = View::factory('add_order_mail')
+                ->set('params', $params)
+            ;
 
-        $this->sendMail('shop@dadaauto.ru', 'Запрос на запчасти с быстрой формы', $view, Arr::get($params, 'email'));
+            $this->sendMail('shop@dadaauto.ru', 'Запрос на запчасти с быстрой формы', $view, Arr::get($params, 'email'));
+        }
 
         return $params['order_id'];
     }
@@ -416,10 +424,17 @@ class Model_Admin extends Kohana_Model
 
     public function setOrderPart($params = [])
     {
-        $res = DB::query(Database::INSERT, 'INSERT INTO `orders__parts` (`order_id`, `part`) VALUES (:order_id, :part)')
-            ->param(':order_id', Arr::get($params, 'order_id'))
-            ->param(':part', Arr::get($params, 'part'))
-            ->execute();
+        if (null !== Arr::get($params, 'part')) {
+            $res = DB::query(Database::INSERT, 'INSERT INTO `orders__parts` (`order_id`, `part`) VALUES (:order_id, :part)')
+                ->param(':order_id', Arr::get($params, 'order_id'))
+                ->param(':part', Arr::get($params, 'part'))
+                ->execute()
+            ;
+
+            return Arr::get($res, 0);
+        }
+
+        return null;
     }
 
     public function setOrderStatus($params = [])
@@ -574,13 +589,21 @@ class Model_Admin extends Kohana_Model
     public function setOrderProduct($orderId, $productIdArr, $partArr = [], $quantityArr = [], $priceArr = [])
     {
         foreach ($productIdArr as $i => $productId) {
-            $check = DB::select()->from('orders__parts')->where('id', '=', $productId)->execute()->current();
+            $check = DB::select()
+                ->from('orders__parts')
+                ->where('id', '=', $productId)
+                ->and_where('order_id', '=', $orderId)
+                ->execute()
+                ->current()
+            ;
 
             if ($check) {
                 DB::update('orders__parts')
                     ->set(['part' => Arr::get($partArr, $i, ''), 'quantity' => Arr::get($quantityArr, $i, 1), 'price' => Arr::get($priceArr, $i, 0)])
                     ->where('id', '=', $productId)
-                    ->execute();
+                    ->and_where('order_id', '=', $orderId)
+                    ->execute()
+                ;
 
                 continue;
             }

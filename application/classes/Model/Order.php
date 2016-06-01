@@ -20,7 +20,7 @@ class Model_Order extends Kohana_Model
             ->on('oc.order_id', '=', 'o.id')
             ->join(['orders__cars', 'ocars'])
             ->on('ocars.order_id', '=', 'o.id')
-            ->join(['orders__parts', 'op'])
+            ->join(['orders__parts', 'op'], 'left')
             ->on('op.order_id', '=', 'o.id')
             ->where('o.id', '=', $orderId)
             ->execute()

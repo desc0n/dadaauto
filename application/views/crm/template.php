@@ -58,7 +58,7 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="/crm/actions_list/?new_order=true"><i class="fa fa-file fa-fw"></i> Заказ</a>
+                        <a href="/crm/quick_sale"><i class="fa fa-file fa-fw"></i> Быстрая продажа</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-list fa-fw"></i> События<span class="fa arrow"></span></a>

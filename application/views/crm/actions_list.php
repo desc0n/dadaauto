@@ -117,8 +117,19 @@
                             <input class="form-control" name="email" id="newEmail" value="">
                         </div>
                     </div>
+                    <label>Товар</label>
+                    <div id="redactProductForm">
+                        <div class="form-group product-row" id="productRow1" data-row="1">
+                            <input class="col-lg-6-important form-control" id="productName" name="productName[]" onkeyup="initTypeaheadProductName($(this));" onchange="getCurrentTypeahead($(this));" placeholder="Название" autocomplete="off">
+                            <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">
+                            <input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">
+                            <button class="btn btn-default col-lg-1-important" disabled><i class="fa fa-remove fa-fw"></i></button>
+                            <input type="hidden" name="productId[]" id="productId">
+                        </div>
+                    </div>
                     <input type="hidden" id="customerId" name="customer">
                 </form>
+                <button type="button" class="btn btn-default" id="addProductRowBtn">Добавить позицию <i class="fa fa-plus fa-fw"></i></button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
@@ -135,10 +146,4 @@
         });
     });
 </script>
-<?if (Arr::get($get, 'new_order') === 'true') {?>
-<script>
-    $(document).ready(function () {
-        $('#addActionModal').modal('toggle');
-    });
-</script>
-<?}?>
+

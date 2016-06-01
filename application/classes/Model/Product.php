@@ -80,10 +80,11 @@ class Model_Product extends Kohana_Model
      * @param null|int $brandId
      * @param null|string $article
      * @param null|string $name
+     * @param null|string $subName
      *
      * @return array
      */
-    public function findProduct($id = null, $brandId = null, $article = null, $name = null)
+    public function findProduct($id = null, $brandId = null, $article = null, $name = null, $subName = null)
     {
         /** @var Database_Query_Builder_Select $query */
         $query = DB::select()
@@ -95,6 +96,7 @@ class Model_Product extends Kohana_Model
         $query = null !== $brandId ? $query->and_where('brand_id', '=', $brandId) : $query;
         $query = null !== $article ? $query->and_where('article', '=', $article) : $query;
         $query = null !== $name ? $query->and_where('name', '=', $name) : $query;
+        $query = null !== $subName ? $query->and_where('name', 'like', sprintf('%%%s%%', $subName))->group_by('name') : $query;
 
         return $query->execute()->as_array();
     }

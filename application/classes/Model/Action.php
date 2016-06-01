@@ -106,6 +106,7 @@ class Model_Action extends Kohana_Model
             $check = DB::select()
                 ->from('customers__products')
                 ->where('id', '=', $productId)
+                ->and_where('action_id', '=', $actionId)
                 ->execute()
                 ->current()
             ;
@@ -114,6 +115,7 @@ class Model_Action extends Kohana_Model
                 DB::update('customers__products')
                     ->set(['part' => Arr::get($partArr, $i, ''), 'quantity' => Arr::get($quantityArr, $i, 1), 'price' => Arr::get($priceArr, $i, 0)])
                     ->where('id', '=', $productId)
+                    ->and_where('action_id', '=', $actionId)
                     ->execute();
 
                 continue;
