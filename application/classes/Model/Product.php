@@ -130,7 +130,7 @@ class Model_Product extends Kohana_Model
     public function addProduct($brandId, $article, $name)
     {
         $res = DB::insert('products', ['brand_id', 'article', 'name'])
-            ->values([$brandId, strtoupper($article), $name])
+            ->values([$brandId, strtoupper($article), sprintf('%s (%s)', $name, strtoupper($article))])
             ->execute()
         ;
 

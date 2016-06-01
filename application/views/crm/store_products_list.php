@@ -32,7 +32,9 @@
                                 <td><?=$remain['product_name'];?></td>
                                 <td><?=$remain['quantity'];?></td>
                                 <td><?=$remain['price'];?></td>
-                                <td></td>
+                                <td class="text-center">
+                                    <button class="btn btn-default redactStoreRemainBtn" data-id="<?=$remain['id'];?>" title="Редактировать"><i class="fa fa-pencil fa-fw"></i></button>
+                                </td>
                             </tr>
                         <?}?>
                         </tbody>
@@ -111,7 +113,7 @@
                             <input class="form-control" name="place" value="" autocomplete="off">
                         </div>
                     </div>
-                    <input type="hidden" id="customerId" name="customer">
+                    <input type="hidden" id="storeRemainId" name="store_remain_id">
                 </form>
             </div>
             <div class="modal-footer">

@@ -281,7 +281,7 @@ class Controller_Crm extends Controller
         $this->response->body($template);
     }
     
-    public function action_store_upload()
+    public function action_store_remain()
     {
         /** @var Model_Product $productModel */
         $productModel = Model::factory('Product');

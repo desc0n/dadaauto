@@ -76,7 +76,7 @@
                                 <a href="/crm/store_distributors">Поставщики</a>
                             </li>
                             <li>
-                                <a href="/crm/store_upload">Поступление</a>
+                                <a href="/crm/store_remain">Остатки</a>
                             </li>
                         </ul>
                     </li>
