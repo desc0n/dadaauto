@@ -228,6 +228,8 @@ class Controller_Crm extends Controller
 
         $actionId = $this->request->param('id');
 
+        $actionData = $actionModel->getActionData($actionId);
+            
         if ($this->request->post('redactActionClient') !== null) {
             $actionModel->setActionCustomer(
                 $this->request->post('redactActionClient'),
@@ -264,10 +266,20 @@ class Controller_Crm extends Controller
             HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
 
+        if (Arr::get($_POST, 'newSale') !== null) {
+            $saleId = $actionModel->addSaleFromOrder($actionId);
+
+            if (Arr::get($actionData, 'action_type') == 3) {
+                $actionModel->confirmSale($saleId);
+            }
+            
+            HTTP::redirect(sprintf('/crm/sale/%d', $saleId));
+        }
+
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/action_info')
-            ->set('actionData', $actionModel->getActionData($actionId))
+            ->set('actionData', $actionData)
             ->set('actionProducts', $actionModel->getActionProductsData($actionId))
             ->set('communicationMethods', $adminModel->findAllCommunicationMethods())
             ->set('saleMethods', $adminModel->findAllSaleMethods())
@@ -367,13 +379,38 @@ class Controller_Crm extends Controller
 
         $customerData = $adminModel->findCustomerBy($adminModel->quickCustomer);
 
-        $customerId = 0 === count($customerData) ? $adminModel->addCustomer($adminModel->quickCustomer) : Arr::get(Arr::get($customerData, 0, []), 'id');
+        $customerId = 0 === count($customerData) ? $adminModel->addCustomer($adminModel->quickCustomer) : Arr::get(Arr::get($customerData, 0, []), 'customers_id');
 
         $actionId = $adminModel->addAction([
             'customer_id' => $customerId,
-            'newActionType' => 2,
+            'newActionType' => 3,
         ]);
 
         HTTP::redirect(sprintf('/crm/action/%d/?quick_sale=true', $actionId));
     }
+
+
+    public function action_sale()
+    {
+        /** @var $adminModel Model_Admin */
+        $adminModel = Model::factory('Admin');
+
+        /** @var $actionModel Model_Action */
+        $actionModel = Model::factory('Action');
+
+        $saleId = $this->request->param('id');
+
+        $saleData = $actionModel->getActionData($saleId);
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/sale_info')
+            ->set('saleData', $saleData)
+            ->set('saleProducts', $actionModel->getSaleProductsData($saleId))
+            ->set('get', $this->request->query())
+        ;
+
+        $this->response->body($template);
+    }
+
 }

@@ -7,7 +7,10 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="form-group">
-            <button class="btn btn-primary">Сформировать реализацию <i class="fa fa-plus fa-fw"></i></button>
+            <form method="post">
+                <button class="btn btn-primary">Сформировать реализацию <i class="fa fa-plus fa-fw"></i></button>
+                <input type="hidden" name="newSale">
+            </form>
         </div>
         <div class="panel-body">
             <div class="panel panel-default">
