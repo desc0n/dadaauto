@@ -86,7 +86,7 @@ class Model_Action extends Kohana_Model
     public function addActionProduct($actionId, $productId = null, $part = '', $quantity = 1, $price = 0)
     {
         $res = DB::insert('customers__products', ['action_id', 'product_id', 'part', 'quantity', 'price'])
-            ->values([$actionId, $productId, $part, $quantity, $price])
+            ->values([$actionId, empty($productId) ? null : $productId, $part, $quantity, $price])
             ->execute()
         ;
 
