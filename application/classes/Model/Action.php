@@ -74,7 +74,7 @@ class Model_Action extends Kohana_Model
 
     /**
      * @param int $actionId
-     * @param int|null $productId
+     * @param int|null $storeRemainId
      * @param string $part
      * @param int $quantity
      * @param int $price
@@ -83,10 +83,10 @@ class Model_Action extends Kohana_Model
      * 
      * @throws Kohana_Exception
      */
-    public function addActionProduct($actionId, $productId = null, $part = '', $quantity = 1, $price = 0)
+    public function addActionProduct($actionId, $storeRemainId = null, $part = '', $quantity = 1, $price = 0)
     {
-        $res = DB::insert('customers__products', ['action_id', 'product_id', 'part', 'quantity', 'price'])
-            ->values([$actionId, empty($productId) ? null : $productId, $part, $quantity, $price])
+        $res = DB::insert('customers__products', ['action_id', 'store_remain_id', 'part', 'quantity', 'price'])
+            ->values([$actionId, empty($storeRemainId) ? null : $storeRemainId, $part, $quantity, $price])
             ->execute()
         ;
 
@@ -95,19 +95,19 @@ class Model_Action extends Kohana_Model
 
     /**
      * @param int $actionId
-     * @param array $productIdArr
+     * @param array $storeRemainIdArr
      * @param array $partArr
      * @param array $quantityArr
      * @param array $priceArr
      *
      * @return void
      */
-    public function setActionProduct($actionId, $productIdArr, $partArr = [], $quantityArr = [], $priceArr = [])
+    public function setActionProduct($actionId, $storeRemainIdArr, $partArr = [], $quantityArr = [], $priceArr = [])
     {
-        foreach ($productIdArr as $i => $productId) {
+        foreach ($storeRemainIdArr as $i => $storeRemainId) {
             $check = DB::select()
                 ->from('customers__products')
-                ->where('product_id', '=', $productId)
+                ->where('store_remain_id', '=', $storeRemainId)
                 ->and_where('action_id', '=', $actionId)
                 ->execute()
                 ->current()
@@ -116,14 +116,14 @@ class Model_Action extends Kohana_Model
             if ($check) {
                 DB::update('customers__products')
                     ->set(['part' => Arr::get($partArr, $i, ''), 'quantity' => Arr::get($quantityArr, $i, 1), 'price' => Arr::get($priceArr, $i, 0)])
-                    ->where('product_id', '=', $productId)
+                    ->where('store_remain_id', '=', $storeRemainId)
                     ->and_where('action_id', '=', $actionId)
                     ->execute();
 
                 continue;
             }
 
-            $this->addActionProduct($actionId, $productId, Arr::get($partArr, $i, ''), Arr::get($quantityArr, $i, 1), Arr::get($priceArr, $i, 0));
+            $this->addActionProduct($actionId, $storeRemainId, Arr::get($partArr, $i, ''), Arr::get($quantityArr, $i, 1), Arr::get($priceArr, $i, 0));
         }
     }
 
@@ -154,9 +154,9 @@ class Model_Action extends Kohana_Model
         $saleId = Arr::get($res, 0);
 
         foreach ($products as $product) {
-            DB::insert('customers__sales_products', ['sale_id', 'product_id', 'quantity', 'price', 'date'])
+            DB::insert('customers__sales_products', ['sale_id', 'product_id', 'store_remain_id', 'quantity', 'price', 'date'])
                 ->values([
-                    $saleId, $product['product_id'], $product['quantity'], $product['price'], DB::expr('now()')
+                    $saleId, $product['product_id'], $product['store_remain_id'], $product['quantity'], $product['price'], DB::expr('now()')
                 ])
                 ->execute()
             ;
@@ -204,11 +204,17 @@ class Model_Action extends Kohana_Model
      */
     public function getSaleProductsData($saleId)
     {
-        return DB::select('csp.*', ['p.name', 'product_name'])
+        return DB::select(
+                'csp.*', 
+                ['p.name', 'product_name'],
+                [DB::expr("concat(p.name, ' (', p.article, ')')"), 'full_product_name']
+            )
             ->from(['customers__sales_products', 'csp'])
+            ->join(['store__remain', 'sr'])
+            ->on('sr.id', '=', 'csp.store_remain_id')
             ->join(['products', 'p'], 'left')
-            ->on('p.id', '=', 'csp.product_id')
-            ->where('sale_id', '=', $saleId)
+            ->on('p.id', '=', 'sr.product_id')
+            ->where('csp.sale_id', '=', $saleId)
             ->execute()
             ->as_array()
         ;

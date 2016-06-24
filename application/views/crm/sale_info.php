@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Информация о событии</h1>
+        <h1 class="page-header">Информация о реализации</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -48,18 +48,18 @@
                     Список товаров
                 </div>
                 <div class="panel-body">
-                    <table class="table table-striped table-bactioned table-hover" id="dataTables-example">
+                    <table class="table table-striped table-bactioned table-hover">
                         <thead>
                         <tr>
                             <th>Название товара</th>
-                            <th>Кол-во</th>
-                            <th>Цена</th>
+                            <th class="text-center">Кол-во</th>
+                            <th class="text-center">Цена</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?foreach ($saleProducts as $product) {?>
                             <tr id="rowProduct<?=$product['id'];?>">
-                                <td class="product-name-cell"><?=$product['product_name'];?></td>
+                                <td class="product-name-cell"><?=$product['full_product_name'];?></td>
                                 <td class="text-center product-quantity-cell"><?=$product['quantity'];?></td>
                                 <td class="text-center product-price-cell"><?=$product['price'];?></td>
                             </tr>

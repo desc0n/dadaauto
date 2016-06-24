@@ -254,10 +254,10 @@ class Controller_Crm extends Controller
             HTTP::redirect(sprintf('/crm/action/%d', $actionId));
         }
 
-        if (Arr::get($_POST, 'productId') !== null) {
+        if (Arr::get($_POST, 'storeRemainId') !== null) {
             $actionModel->setActionProduct(
                 $actionId,
-                $this->request->post('productId'),
+                $this->request->post('storeRemainId'),
                 $this->request->post('productName'),
                 $this->request->post('productQuantity'),
                 $this->request->post('productPrice')

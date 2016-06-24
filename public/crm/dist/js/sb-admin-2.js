@@ -150,7 +150,7 @@ $(function() {
             '<input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">' +
             '<input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">' +
             '<button class="btn btn-default col-lg-1-important form-control" onclick="$(\'#productRow' + (rowLength + 1) + '\').remove();"><i class="fa fa-remove fa-fw"></i></button>' +
-            '<input type="hidden" name="productId[]" id="productId">' +
+            '<input type="hidden" name="storeRemainId[]" id="storeRemainId">' +
         '</div>');
     });
 
@@ -414,7 +414,14 @@ function initTypeaheadProductName($input)
                 var parseResponse = JSON.parse(response);
 
                 for (var i in parseResponse) {
-                    data.push(parseResponse[i].id + '#' + parseResponse[i].name);
+                    data.push(
+                        parseResponse[i].id +
+                        '#' + parseResponse[i].full_product_name +
+                        '#' + parseResponse[i].markup +
+                        '#' + parseResponse[i].price +
+                        '#' + parseResponse[i].distributor_name +
+                        '#' + parseResponse[i].quantity
+                    );
                 }
 
                 return process(data);
@@ -425,7 +432,7 @@ function initTypeaheadProductName($input)
 
             return '<div class="typeahead">' +
                 '<div class="pull-left margin-small">' +
-                '<div class="text-left"><strong>' + parts[1] + '</strong></div>' +
+                '<div class="text-left"><strong>' + parts[1] + ' Поставщик: ' + parts[4] +' Наличие на складе: ' + parts[5] +'</strong></div>' +
                 '</div>' +
                 '<div class="clearfix"></div>' +
                 '</div>';
@@ -449,7 +456,8 @@ function getCurrentTypeahead($input)
 
     var row = $input.parent().data('row');
 
-    $('#productRow' + row + ' #productId').val(parts[0]);
+    $('#productRow' + row + ' #storeRemainId').val(parts[0]);
+    $('#productRow' + row + ' #productPrice').val((1 + (parts[2] / 100)) * parts[3]);
 }
 function initChange($newSaleProductName) {
     var current = $newSaleProductName.typeahead("getActive");

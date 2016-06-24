@@ -48,7 +48,7 @@
                     Список товаров
                 </div>
                 <div class="panel-body">
-                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>Название товара</th>

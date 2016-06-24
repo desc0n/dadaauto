@@ -101,6 +101,41 @@ class Model_Product extends Kohana_Model
         return $query->execute()->as_array();
     }
 
+
+    /**
+     * @param null|string $subName
+     *
+     * @return array
+     */
+    public function findStoreProduct($subName)
+    {
+        $query = DB::select(
+                'sr.id',
+                'sr.quantity',
+                'p.name', 
+                ['pd.name', 'distributor_name'], 
+                'pdm.markup',
+                'sr.price',
+                [DB::expr("concat(p.name, ' (', p.article, ')')"), 'full_product_name']
+            )
+            ->from(['store__remain', 'sr'])
+            ->join(['products', 'p'])
+            ->on('p.id', '=', 'sr.product_id')
+            ->join(['products__distributors_markups', 'pdm'])
+            ->on('pdm.distributor_id', '=', 'sr.distributor_id')
+            ->on('pdm.type', '=', 'sr.type')
+            ->join(['products__distributors', 'pd'], 'left')
+            ->on('pd.id', '=', 'sr.distributor_id')
+            ->where_open()
+            ->where('p.name', 'like', sprintf('%%%s%%', $subName))
+            ->or_where('p.article', 'like', sprintf('%%%s%%', $subName))
+            ->where_close()
+            ->execute()
+        ;
+
+        return $query->as_array();
+    }
+
     /**
      * @param string $name
      *
@@ -130,7 +165,7 @@ class Model_Product extends Kohana_Model
     public function addProduct($brandId, $article, $name)
     {
         $res = DB::insert('products', ['brand_id', 'article', 'name'])
-            ->values([$brandId, strtoupper($article), sprintf('%s (%s)', $name, strtoupper($article))])
+            ->values([$brandId, strtoupper($article), sprintf('%s', $name)])
             ->execute()
         ;
 

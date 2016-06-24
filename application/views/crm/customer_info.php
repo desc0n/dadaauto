@@ -138,7 +138,7 @@
                             Список продаж
                         </div>
                         <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-sales">
+                            <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th>Добавил</th>

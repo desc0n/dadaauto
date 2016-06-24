@@ -79,7 +79,7 @@ class Controller_Ajax extends Controller
         /** @var Model_Product $productModel */
         $productModel = Model::factory('Product');
 
-        $result = json_encode($productModel->findProduct(null, null, null, null, $this->request->post('name')));
+        $result = json_encode($productModel->findStoreProduct($this->request->post('name')));
         $this->response->body($result);
     }
 

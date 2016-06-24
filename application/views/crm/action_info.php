@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Информация о событии</h1>
+        <h1 class="page-header">Информация о документе</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -54,13 +54,13 @@
                     Список товаров
                 </div>
                 <div class="panel-body">
-                    <table class="table table-striped table-bactioned table-hover" id="dataTables-example">
+                    <table class="table table-striped table-bactioned table-hover">
                         <thead>
                         <tr>
                             <th>Название товара</th>
-                            <th>Кол-во</th>
-                            <th>Цена</th>
-                            <th>Действия</th>
+                            <th class="text-center">Кол-во</th>
+                            <th class="text-center">Цена</th>
+                            <th class="text-center">Действия</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -181,7 +181,7 @@
                         <input class="col-lg-2-important form-control" id="productQuantity" name="productQuantity[]" placeholder="Кол-во" autocomplete="off">
                         <input class="col-lg-2-important form-control" id="productPrice" name="productPrice[]" placeholder="Цена" autocomplete="off">
                         <button class="btn btn-default col-lg-1-important" disabled><i class="fa fa-remove fa-fw"></i></button>
-                        <input type="hidden" name="productId[]" id="productId">
+                        <input type="hidden" name="storeRemainId[]" id="storeRemainId">
                     </div>
                 </form>
                 <button type="button" class="btn btn-default" id="addProductRowBtn">Добавить позицию <i class="fa fa-plus fa-fw"></i></button>

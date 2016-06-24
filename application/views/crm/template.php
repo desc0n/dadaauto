@@ -61,7 +61,7 @@
                         <a href="/crm/quick_sale"><i class="fa fa-file fa-fw"></i> Быстрая продажа</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-list fa-fw"></i> События<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-list fa-fw"></i> Заказы<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="/crm/actions_list">Список</a>

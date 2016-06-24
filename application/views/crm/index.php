@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge"><?=count($actionsList);?></div>
-                        <div>События</div>
+                        <div>Заказы</div>
                     </div>
                 </div>
             </div>
