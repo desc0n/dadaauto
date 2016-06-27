@@ -81,22 +81,13 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-users fa-fw"></i> Клиенты<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="/crm/customer_list">Список</a>
-                            </li>
-                            <li>
-                                <a href="/crm/customer_sending">Рассылка</a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
-                    <li>
                         <a href="#"><i class="fa fa-dollar fa-fw"></i> Касса<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="/crm/markups_list">Наценки</a>
+                            </li>
+                            <li>
+                                <a href="/crm/payment_accept">Принять оплату</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

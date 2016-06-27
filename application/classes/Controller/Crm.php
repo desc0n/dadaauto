@@ -153,7 +153,7 @@ class Controller_Crm extends Controller
 
         $template->content = View::factory('crm/actions_list')
             ->set('actionsList', $adminModel->findAllActions($start, $end))
-            ->set('get', $_GET)
+            ->set('get', $this->request->query())
             ->set('start', $start)
             ->set('end', $end)
             ->set('actions', $adminModel->findActionsType())
@@ -389,12 +389,8 @@ class Controller_Crm extends Controller
         HTTP::redirect(sprintf('/crm/action/%d/?quick_sale=true', $actionId));
     }
 
-
     public function action_sale()
     {
-        /** @var $adminModel Model_Admin */
-        $adminModel = Model::factory('Admin');
-
         /** @var $actionModel Model_Action */
         $actionModel = Model::factory('Action');
 
@@ -408,6 +404,29 @@ class Controller_Crm extends Controller
             ->set('saleData', $saleData)
             ->set('saleProducts', $actionModel->getSaleProductsData($saleId))
             ->set('get', $this->request->query())
+        ;
+
+        $this->response->body($template);
+    }
+
+    public function action_payment_accept()
+    {
+        /** @var $orderModel Model_Order */
+        $orderModel = Model::factory('Order');
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
+
+        $start = null != $this->request->query('start') ? $startDate->format('d.m.Y') : $startDate->modify('- 1 week')->format('d.m.Y');
+        $end = $endDate->format('d.m.Y');
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/not_payed_orders_list')
+            ->set('notPayedOrders', $orderModel->findNotPayedOrders($this->request->query('start'), $this->request->query('end')))
+            ->set('get', $this->request->query())
+            ->set('start', $start)
+            ->set('end', $end)
         ;
 
         $this->response->body($template);
