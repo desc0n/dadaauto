@@ -411,9 +411,22 @@ class Controller_Crm extends Controller
 
     public function action_payment_accept()
     {
-        /** @var $orderModel Model_Order */
-        $orderModel = Model::factory('Order');
+        /** @var $paymentModel Model_Payment */
+        $paymentModel = Model::factory('Payment');
 
+        /** @var $actionModel Model_Action */
+        $actionModel = Model::factory('Action');
+        
+        if (null !== $this->request->post('paymentAction')) {
+            $paymentModel->addLog($this->request->post('paymentAction'), $this->request->post('price'), $this->request->post('type'));
+
+            $saleId = $actionModel->addSaleFromOrder($this->request->post('paymentAction'));
+
+            $actionModel->confirmSale($saleId);
+
+            HTTP::redirect($this->request->referrer());
+        }
+        
         $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
         $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
 
@@ -423,7 +436,7 @@ class Controller_Crm extends Controller
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/not_payed_orders_list')
-            ->set('notPayedOrders', $orderModel->findNotPayedOrders($this->request->query('start'), $this->request->query('end')))
+            ->set('notPayedOrders', $actionModel->findNotPayedOrders($this->request->query('start'), $this->request->query('end')))
             ->set('get', $this->request->query())
             ->set('start', $start)
             ->set('end', $end)

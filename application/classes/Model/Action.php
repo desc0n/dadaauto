@@ -249,4 +249,58 @@ class Model_Action extends Kohana_Model
 
         return $res;
     }
+
+    /**
+     * @param string $startedAt
+     * @param string $finishedAt
+     *
+     * @return array
+     */
+    public function findNotPayedOrders($startedAt, $finishedAt)
+    {
+        $data = [];
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $startedAt ? $startedAt : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $finishedAt ? $finishedAt : date('d.m.Y'));
+
+        $start = null != $startedAt ? $startDate->format('Y-m-d H:i:s') : $startDate->modify('- 1 week')->format('Y-m-d H:i:s');
+        $end = $endDate->format('Y-m-d H:i:s');
+
+        $res = DB::select(
+            ['cal.id', 'action_id'],
+            'cal.date',
+            [DB::select(DB::expr('sum(pl.price)'))->from(['payment__log', 'pl'])->where('pl.action_id', '=', DB::expr('cal.id')), 'payed_price']
+        )
+            ->from(['customers__actions_list', 'cal'])
+            ->where('cal.date', 'between', [$start, $end])
+            ->and_where('cal.type', '=', 2)
+            ->and_where('cal.id', 'not in', DB::select('action_id')->from('payment__log')->where('payed_status', '=', true))
+            ->execute()
+            ->as_array()
+        ;
+
+        foreach ($res as $row) {
+            $data[$row['action_id']] = $row;
+
+            $data[$row['action_id']]['action_price'] = $this->getActionPrice($row['action_id']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param int $actionId
+     *
+     * @return int
+     */
+    public function getActionPrice($actionId)
+    {
+        $price = 0;
+
+        foreach ($this->getActionProductsData($actionId) as $partData) {
+            $price += $partData['quantity'] * $partData['price'];
+        }
+
+        return $price;
+    }
 }
