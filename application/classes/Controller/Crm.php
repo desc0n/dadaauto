@@ -445,4 +445,26 @@ class Controller_Crm extends Controller
         $this->response->body($template);
     }
 
+    public function action_sales_list()
+    {
+        /** @var $actionModel Model_Action */
+        $actionModel = Model::factory('Action');
+
+        $template = $this->getBaseTemplate();
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
+
+        $start = null != $this->request->query('start') ? $startDate->format('d.m.Y') : $startDate->modify('- 1 week')->format('d.m.Y');
+        $end = $endDate->format('d.m.Y');
+
+        $template->content = View::factory('crm/sales_list')
+            ->set('actionsList', $actionModel->findAllSales($start, $end))
+            ->set('get', $this->request->query())
+            ->set('start', $start)
+            ->set('end', $end)
+        ;
+
+        $this->response->body($template);
+    }
 }

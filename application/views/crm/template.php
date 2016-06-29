@@ -70,6 +70,15 @@
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
+                        <a href="#"><i class="fa fa-money fa-fw"></i> Реализации<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/crm/sales_list">Список</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
                         <a href="#"><i class="fa fa-archive fa-fw"></i> Склад<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>

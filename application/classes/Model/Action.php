@@ -237,12 +237,12 @@ class Model_Action extends Kohana_Model
                 ->join(['customers__list', 'cl'])
                 ->on('cl.id', '=', 'cd.customers_id')
                 ->join(['customers__sales_list', 'csl'])
-                ->on('cal.customer_id', '=', 'cl.id')
+                ->on('csl.customer_id', '=', 'cl.id')
                 ->join(['customers__type', 'ct'])
                 ->on('ct.id', '=', 'cd.type')
                 ->join(['users__profile', 'up'])
                 ->on('up.user_id', '=', 'cl.manager_id')
-                ->where('cal.id', '=', $saleId)
+                ->where('csl.id', '=', $saleId)
                 ->execute()
                 ->current()
         ;
@@ -298,6 +298,55 @@ class Model_Action extends Kohana_Model
         $price = 0;
 
         foreach ($this->getActionProductsData($actionId) as $partData) {
+            $price += $partData['quantity'] * $partData['price'];
+        }
+
+        return $price;
+    }
+
+    /**
+     * @param string $startedAt
+     * @param string $finishedAt
+     * 
+     * @return array
+     */
+    public function findAllSales($startedAt, $finishedAt)
+    {
+        $data = [];
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $startedAt ? $startedAt : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $finishedAt ? $finishedAt : date('d.m.Y'));
+
+        $start = null != $startedAt ? $startDate->format('Y-m-d H:i:s') : $startDate->modify('- 1 week')->format('Y-m-d H:i:s');
+        $end = $endDate->format('Y-m-d H:i:s');
+
+        $res =
+            DB::select('csl.*')
+            ->from(['customers__sales_list', 'csl'])
+            ->where('csl.date', 'between', [$start, $end])
+            ->execute()
+            ->as_array()
+        ;
+
+        foreach ($res as $row) {
+            $data[$row['id']] = $row;
+
+            $data[$row['id']]['sale_price'] = $this->getSalePrice($row['id']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param int $saleId
+     *
+     * @return int
+     */
+    public function getSalePrice($saleId)
+    {
+        $price = 0;
+
+        foreach ($this->getSaleProductsData($saleId) as $partData) {
             $price += $partData['quantity'] * $partData['price'];
         }
 
