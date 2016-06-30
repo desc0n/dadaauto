@@ -436,7 +436,30 @@ class Controller_Crm extends Controller
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/not_payed_orders_list')
-            ->set('notPayedOrders', $actionModel->findNotPayedOrders($this->request->query('start'), $this->request->query('end')))
+            ->set('notPayedOrders', $actionModel->findNotPayedOrders($start, $end))
+            ->set('get', $this->request->query())
+            ->set('start', $start)
+            ->set('end', $end)
+        ;
+
+        $this->response->body($template);
+    }
+
+    public function action_payment_log()
+    {
+        /** @var $paymentModel Model_Payment */
+        $paymentModel = Model::factory('Payment');
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
+
+        $start = null != $this->request->query('start') ? $startDate->format('d.m.Y') : $startDate->modify('- 1 week')->format('d.m.Y');
+        $end = $endDate->format('d.m.Y');
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/payment_log')
+            ->set('payedLog', $paymentModel->getLog($start, $end))
             ->set('get', $this->request->query())
             ->set('start', $start)
             ->set('end', $end)

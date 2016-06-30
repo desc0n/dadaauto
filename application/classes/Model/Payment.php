@@ -5,6 +5,14 @@
  */
 class Model_Payment extends Kohana_Model
 {
+    const CASH = 'cash';
+    const CASHLESS = 'cashless';
+    
+    public $paymentType = [
+        self::CASH => 'Наличными',
+        self::CASHLESS => 'Безналом'
+    ];
+    
     /**
      * @return array
      */
@@ -60,5 +68,18 @@ class Model_Payment extends Kohana_Model
         ;
         
         return Arr::get($res, 0);
+    }
+    
+    public function getLog($startedAt, $finishedAt)
+    {
+        $start = new DateTime($startedAt);
+        $end = new DateTime($finishedAt);
+        
+        return DB::select()
+            ->from('payment__log')
+            ->where('date', 'between', [$start->format('Y-m-d 00:00:00'), $end->modify('+1 day')->format('Y-m-d 00:00:00')])
+            ->execute()
+            ->as_array()
+        ;
     }
 }

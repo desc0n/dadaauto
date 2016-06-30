@@ -98,6 +98,9 @@
                             <li>
                                 <a href="/crm/payment_accept">Принять оплату</a>
                             </li>
+                            <li>
+                                <a href="/crm/payment_log">Отчет</a>
+                            </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
