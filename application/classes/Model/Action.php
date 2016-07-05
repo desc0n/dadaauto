@@ -25,11 +25,11 @@ class Model_Action extends Kohana_Model
                 ['cal.type', 'action_type'],
                 [DB::select('id')->from('customers__sales_delivery')->where('action_id', '=', DB::expr('cal.id'))->limit(1), 'delivery_id']
             )
-            ->from(['customers__data', 'cd'])
+            ->from(['customers__actions_list', 'cal'])
+            ->join(['customers__data', 'cd'])
+            ->on('cd.customers_id', '=', 'cal.customer_id')
             ->join(['customers__list', 'cl'])
             ->on('cl.id', '=', 'cd.customers_id')
-            ->join(['customers__actions_list', 'cal'])
-            ->on('cal.customer_id', '=', 'cl.id')
             ->join(['customers__type', 'ct'])
             ->on('ct.id', '=', 'cd.type')
             ->join(['users__profile', 'up'])
