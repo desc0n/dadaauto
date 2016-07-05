@@ -122,7 +122,7 @@ $customerPhone = Arr::get($saleData, 'phone');
                             <label class="control-label hide" for="redactPhone" id="redactPhoneError">Длина номера 10 цифр</label>
                             <div class="input-group">
                                 <span class="input-group-addon">+7</span>
-                                <input class="form-control" id="redactPhone" disabled value="<?=$customerPhone;?>">
+                                <input class="form-control" id="redactPhone" <?=(empty($customerPhone) ? null : 'disabled');?> value="<?=$customerPhone;?>">
                                 <input type="hidden" name="phone" value="<?=$customerPhone;?>">
                             </div>
                         </div>
