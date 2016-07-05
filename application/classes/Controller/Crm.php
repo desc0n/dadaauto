@@ -415,7 +415,7 @@ class Controller_Crm extends Controller
             HTTP::redirect($this->request->referrer());
         }
 
-        $saleData = $actionModel->getActionData($saleId);
+        $saleData = $actionModel->getSaleData($saleId);
 
         $template = $this->getBaseTemplate();
 

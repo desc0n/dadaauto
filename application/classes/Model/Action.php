@@ -20,6 +20,7 @@ class Model_Action extends Kohana_Model
         $res =
             DB::select(
                 'cd.*',
+                ['cal.id', 'action_id'],
                 ['ct.name', 'type_name'],
                 ['up.name', 'manager_name'],
                 ['cal.type', 'action_type'],
@@ -234,26 +235,15 @@ class Model_Action extends Kohana_Model
     public function getSaleData($saleId)
     {
         $res =
-            DB::select(
-                'cd.*',
-                ['ct.name', 'type_name'],
-                ['up.name', 'manager_name']
-            )
-                ->from(['customers__sales_list', 'csl'])
-                ->join(['customers__data', 'cd'])
-                ->on('cd.customers_id', '=', 'csl.customer_id')
-                ->join(['customers__list', 'cl'])
-                ->on('cl.id', '=', 'cd.customers_id')
-                ->join(['customers__type', 'ct'])
-                ->on('ct.id', '=', 'cd.type')
-                ->join(['users__profile', 'up'])
-                ->on('up.user_id', '=', 'cl.manager_id')
-                ->where('csl.id', '=', $saleId)
+            DB::select('action_id')
+                ->from('customers__sales_list')
+                ->where('id', '=', $saleId)
+                ->limit(1)
                 ->execute()
                 ->current()
         ;
 
-        return $res;
+        return $this->getActionData(Arr::get($res, 'action_id'));
     }
 
     /**
@@ -368,7 +358,7 @@ class Model_Action extends Kohana_Model
      */
     public function addSaleDelivery($saleId)
     {
-        $saleData = $this->getActionData($saleId);
+        $saleData = $this->getSaleData($saleId);
 
         $res = DB::insert('customers__sales_delivery', [
                 'action_id',
@@ -380,7 +370,7 @@ class Model_Action extends Kohana_Model
                 'updated_at'
             ])
             ->values([
-                $saleId,
+                Arr::get($saleData, 'action_id'),
                 Arr::get($saleData, 'phone', ''),
                 Arr::get($saleData, 'name', ''),
                 Arr::get($saleData, 'address', ''),
