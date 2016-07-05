@@ -239,11 +239,11 @@ class Model_Action extends Kohana_Model
                 ['ct.name', 'type_name'],
                 ['up.name', 'manager_name']
             )
-                ->from(['customers__data', 'cd'])
+                ->from(['customers__sales_list', 'csl'])
+                ->join(['customers__data', 'cd'])
+                ->on('cd.customers_id', '=', 'csl.customer_id')
                 ->join(['customers__list', 'cl'])
                 ->on('cl.id', '=', 'cd.customers_id')
-                ->join(['customers__sales_list', 'csl'])
-                ->on('csl.customer_id', '=', 'cl.id')
                 ->join(['customers__type', 'ct'])
                 ->on('ct.id', '=', 'cd.type')
                 ->join(['users__profile', 'up'])
