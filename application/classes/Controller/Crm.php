@@ -509,4 +509,33 @@ class Controller_Crm extends Controller
 
         $this->response->body($template);
     }
+
+    public function action_deliveries_list()
+    {
+        /** @var $actionModel Model_Action */
+        $actionModel = Model::factory('Action');
+        
+        if ($this->request->post('successDelivery') !== null) {
+            $actionModel->setSaleDeliveryStatus($this->request->post('successDelivery'), 'success');
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        $template = $this->getBaseTemplate();
+
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('start') ? $this->request->query('start') : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $this->request->query('end') ? $this->request->query('end') : date('d.m.Y'));
+
+        $start = null != $this->request->query('start') ? $startDate->format('d.m.Y') : $startDate->modify('- 1 week')->format('d.m.Y');
+        $end = $endDate->format('d.m.Y');
+
+        $template->content = View::factory('crm/deliveries_list')
+            ->set('deliveriesList', $actionModel->findAllDeliveries($start, $end))
+            ->set('get', $this->request->query())
+            ->set('start', $start)
+            ->set('end', $end)
+        ;
+
+        $this->response->body($template);
+    }
 }

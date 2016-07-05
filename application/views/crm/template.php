@@ -104,6 +104,15 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
+                    <li>
+                        <a href="#"><i class="fa fa-truck fa-fw"></i> Доставка<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/crm/deliveries_list">Список</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->

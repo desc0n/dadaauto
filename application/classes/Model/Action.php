@@ -5,6 +5,11 @@
  */
 class Model_Action extends Kohana_Model
 {
+    public $deliveryStatus = [
+        'in_progress' => 'В работе',
+        'success' => 'Выполнена',
+    ];
+
     /**
      * @param int $actionId
      *
@@ -387,5 +392,40 @@ class Model_Action extends Kohana_Model
         ;
         
         return Arr::get($res, 0);
+    }
+
+    /**
+     * @param string $startedAt
+     * @param string $finishedAt
+     *
+     * @return array
+     */
+    public function findAllDeliveries($startedAt, $finishedAt)
+    {
+        $startDate = DateTime::createFromFormat('d.m.Y', null != $startedAt ? $startedAt : date('d.m.Y'));
+        $endDate = DateTime::createFromFormat('d.m.Y', null != $finishedAt ? $finishedAt : date('d.m.Y'));
+
+        $start = null != $startedAt ? $startDate->format('Y-m-d 00:00:00') : $startDate->modify('- 1 week')->format('Y-m-d 00:00:00');
+        $end = $endDate->modify('+1 day')->format('Y-m-d 00:00:00');
+
+        return DB::select('csd.*')
+                ->from(['customers__sales_delivery', 'csd'])
+                ->where('csd.updated_at', 'between', [$start, $end])
+                ->execute()
+                ->as_array()
+            ;
+    }
+
+    /**
+     * @param int $deliveryId
+     * @param string $status
+     */
+    public function setSaleDeliveryStatus($deliveryId, $status)
+    {
+        DB::update('customers__sales_delivery')
+            ->set(['status' => $status])
+            ->where('id', '=', $deliveryId)
+            ->execute()
+        ;
     }
 }
