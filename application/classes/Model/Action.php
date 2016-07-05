@@ -17,7 +17,8 @@ class Model_Action extends Kohana_Model
                 'cd.*',
                 ['ct.name', 'type_name'],
                 ['up.name', 'manager_name'],
-                ['cal.type', 'action_type']
+                ['cal.type', 'action_type'],
+                [DB::select('id')->from('customers__sales_delivery')->where('action_id', '=', DB::expr('cal.id'))->limit(1), 'delivery_id']
             )
             ->from(['customers__data', 'cd'])
             ->join(['customers__list', 'cl'])
@@ -351,5 +352,40 @@ class Model_Action extends Kohana_Model
         }
 
         return $price;
+    }
+
+    /**
+     * @param int $saleId
+     * 
+     * @return int|null
+     * 
+     * @throws Kohana_Exception
+     */
+    public function addSaleDelivery($saleId)
+    {
+        $saleData = $this->getActionData($saleId);
+
+        $res = DB::insert('customers__sales_delivery', [
+                'action_id',
+                'customer_phone',
+                'customer_name',
+                'customer_address',
+                'customer_tk',
+                'status',
+                'updated_at'
+            ])
+            ->values([
+                $saleId,
+                Arr::get($saleData, 'phone', ''),
+                Arr::get($saleData, 'name', ''),
+                Arr::get($saleData, 'address', ''),
+                Arr::get($saleData, 'tk', ''),
+                'in_progress',
+                DB::expr('now()')
+            ])
+            ->execute()
+        ;
+        
+        return Arr::get($res, 0);
     }
 }

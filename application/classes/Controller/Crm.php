@@ -395,6 +395,25 @@ class Controller_Crm extends Controller
         $actionModel = Model::factory('Action');
 
         $saleId = $this->request->param('id');
+        
+        if ($this->request->post('redactActionClient') !== null) {
+            $actionModel->setActionCustomer(
+                $this->request->post('redactActionClient'),
+                $this->request->post('name'),
+                $this->request->post('address'),
+                $this->request->post('tk'),
+                $this->request->post('phone'),
+                $this->request->post('email')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if ($this->request->post('addDelivery') !== null) {
+            $actionModel->addSaleDelivery($saleId);
+
+            HTTP::redirect($this->request->referrer());
+        }
 
         $saleData = $actionModel->getActionData($saleId);
 

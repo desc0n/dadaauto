@@ -128,13 +128,31 @@ $(function() {
     });
 
     $('#redactActionClient').click(function () {
+        var errorText = '';
+
         if ($('#redactName').val().length == 0) {
-            var errorText = '<div class="alert alert-danger"><strong>Не указано имя!</strong> ' +
+            errorText = '<div class="alert alert-danger"><strong>Не указано имя!</strong> ' +
                 'Проверьте заполненность поля имя.</div>';
-            $('#redactName').parent().attr('class', 'col-lg-6 has-error');
-            $('#redactNameError').attr('class', 'control-label');
-            $('#errorModalBody').html(errorText);
-            $('#errorModal').modal();
+
+            showErrorModal(errorText, 'redactName');
+
+            return false;
+        }
+
+        if ($('#redactCity').length && $('#redactCity').val().length == 0) {
+            errorText = '<div class="alert alert-danger"><strong>Не указан адрес!</strong> ' +
+                'Проверьте заполненность поля адрес.</div>';
+
+            showErrorModal(errorText, 'redactCity');
+
+            return false;
+        }
+
+        if ($('#redactTk').length && $('#redactTk').val().length == 0) {
+            errorText = '<div class="alert alert-danger"><strong>Не указана транспортная компания!</strong> ' +
+                'Проверьте заполненность поля транспортная компания.</div>';
+
+            showErrorModal(errorText, 'redactTk');
 
             return false;
         }
@@ -353,6 +371,17 @@ $(function() {
     $('.markup-value').blur(function () {
         setMarkup($(this).data('key'));
     });
+
+    $('.form-control').on("keyup", function () {
+        var parentClass = $(this).parent().attr('class');
+
+        if (parentClass.indexOf('has-error') != -1) {
+            parentClass = parentClass.replace(/has-error/g, "");
+
+            $(this).parent().attr('class', parentClass);
+            $(this).parent().find('.control-label').attr('class', 'control-label hide');
+        }
+    });
 });
 
 function checkErrorField(id, colNum, strong, text) {
@@ -466,4 +495,13 @@ function initChange($newSaleProductName) {
 
     $('#newSaleProductCode' + rowId).val(parts[0]);
     $newSaleProductName.val(parts[1]);
+}
+
+function showErrorModal(errorText, id) {
+    var errorClass = $('#' + id).parent().attr('class');
+
+    $('#' + id).parent().attr('class', errorClass + ' has-error');
+    $('#' + id + 'Error').attr('class', 'control-label');
+    $('#errorModalBody').html(errorText);
+    $('#errorModal').modal();
 }
