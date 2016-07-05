@@ -259,8 +259,8 @@ class Model_Action extends Kohana_Model
         $startDate = DateTime::createFromFormat('d.m.Y', null != $startedAt ? $startedAt : date('d.m.Y'));
         $endDate = DateTime::createFromFormat('d.m.Y', null != $finishedAt ? $finishedAt : date('d.m.Y'));
 
-        $start = null != $startedAt ? $startDate->format('Y-m-d H:i:s') : $startDate->modify('- 1 week')->format('Y-m-d H:i:s');
-        $end = $endDate->format('Y-m-d H:i:s');
+        $start = null != $startedAt ? $startDate->format('Y-m-d 00:00:00') : $startDate->modify('- 1 week')->format('Y-m-d 00:00:00');
+        $end = $endDate->modify('+1 day')->format('Y-m-d 00:00:00');
 
         $res = DB::select(
             ['cal.id', 'action_id'],
@@ -313,8 +313,8 @@ class Model_Action extends Kohana_Model
         $startDate = DateTime::createFromFormat('d.m.Y', null != $startedAt ? $startedAt : date('d.m.Y'));
         $endDate = DateTime::createFromFormat('d.m.Y', null != $finishedAt ? $finishedAt : date('d.m.Y'));
 
-        $start = null != $startedAt ? $startDate->format('Y-m-d H:i:s') : $startDate->modify('- 1 week')->format('Y-m-d H:i:s');
-        $end = $endDate->format('Y-m-d H:i:s');
+        $start = null != $startedAt ? $startDate->format('Y-m-d 00:00:00') : $startDate->modify('- 1 week')->format('Y-m-d 00:00:00');
+        $end = $endDate->modify('+1 day')->format('Y-m-d 00:00:00');
 
         $res =
             DB::select('csl.*')
