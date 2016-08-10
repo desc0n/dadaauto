@@ -10,6 +10,12 @@ RewriteBase /
 	Deny From All
 </Files>
 
+# Protect csv files from being viewed
+<Files *.csv>
+	Order Deny,Allow
+	Deny From All
+</Files>
+
 # Protect application and system files from being viewed
 RewriteRule ^(application|modules|system)/ – [F,L]
 

@@ -301,7 +301,7 @@ class Controller_Crm extends Controller
         /** @var Model_Store $storeModel */
         $storeModel = Model::factory('Store');
 
-        if (Arr::get($_POST, 'name') !== null) {
+        if ($this->request->post('name') !== null) {
             $storeModel->addRemain(
                 $this->request->post('brand'),
                 $this->request->post('article'),
@@ -315,7 +315,13 @@ class Controller_Crm extends Controller
 
             HTTP::redirect($this->request->referrer());
         }
-        
+
+        if (isset($_FILES['filename']) && count($_FILES['filename'])) {
+            $storeModel->uploadProducts($_FILES['filename'], $this->request->post('distributor'));
+
+//            HTTP::redirect($this->request->referrer());
+        }
+
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/store_products_list')

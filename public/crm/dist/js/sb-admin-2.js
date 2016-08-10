@@ -382,6 +382,22 @@ $(function() {
             $(this).parent().find('.control-label').attr('class', 'control-label hide');
         }
     });
+    
+    $('#uploadProductsBtn').click(function () {
+        if($('#uploadProductModal #filename').val() == '') {
+            alert('Не выбран файл!');
+            
+            return false;
+        }
+        
+        if($('#uploadProductModal #distributor').val() == 0) {
+            alert('Не выбран поставщик!');
+            
+            return false;
+        }
+        
+        $(this).parent('form').submit();
+    });
 });
 
 function checkErrorField(id, colNum, strong, text) {

@@ -47,6 +47,9 @@
         <div class="form-group">
             <button class="btn btn-success" data-toggle="modal" data-target="#addStoreProductModal">Добавить товар <i class="fa fa-plus fa-fw"></i></button>
         </div>
+        <div class="form-group">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#uploadProductModal">Загрузить прайс <i class="fa fa-plus fa-fw"></i></button>
+        </div>
         <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
@@ -119,6 +122,37 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary" id="addNewStoreProduct">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uploadProductModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Загрузка прайса</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="post" enctype='multipart/form-data'>
+                    <div class="form-group">
+                        <label for="filename">Выбор файла</label>
+                        <input type="file" id="filename" name="filename">
+                    </div>
+                    <div class="form-group col-lg-6 row" style="float: none;">
+                        <label for="distributor">Выбор поставщика</label>
+                        <select id="distributor" name="distributor" class="form-control">
+                            <option value="0">не выбрано</option>
+                            <?foreach ($distributorsData as $distributor) {?>
+                            <option value="<?=$distributor['id'];?>"><?=$distributor['name'];?></option>
+                            <?}?>
+                        </select>
+                    </div>
+
+                    <button type="button" id="uploadProductsBtn" class="btn btn-default">Загрузить</button>
+                </form>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>
