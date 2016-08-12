@@ -71,7 +71,7 @@
             </form>
         </div>
         <div class="form-group">
-            Ссылка на прайс <a href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
+            Ссылка на прайс <a download href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
         </div>
         <!-- /.panel -->
     </div>
