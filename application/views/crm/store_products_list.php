@@ -21,7 +21,6 @@
                                 <th>Название</th>
                                 <th>Количество</th>
                                 <th>Закупочная цена</th>
-                                <th>Действия</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -30,10 +29,21 @@
                                 <td><?=$remain['brand_name'];?></td>
                                 <td><?=$remain['article'];?></td>
                                 <td><?=$remain['product_name'];?></td>
-                                <td><?=$remain['quantity'];?></td>
-                                <td><?=$remain['price'];?></td>
-                                <td class="text-center">
-                                    <button class="btn btn-default redactStoreRemainBtn" data-id="<?=$remain['id'];?>" title="Редактировать"><i class="fa fa-pencil fa-fw"></i></button>
+                                <td>
+                                    <div class="input-group" id="changeQuantity<?=$remain['id'];?>">
+                                        <input type="text" class="form-control quantity-value" value="<?=$remain['quantity'];?>">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button" onclick="changeQuantity(<?=$remain['id'];?>)"><i class="glyphicon glyphicon-ok"></i></button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group" id="changePrice<?=$remain['id'];?>">
+                                        <input type="text" class="form-control price-value" value="<?=$remain['price'];?>">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button" onclick="changePrice(<?=$remain['id'];?>)"><i class="glyphicon glyphicon-ok"></i></button>
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                         <?}?>
@@ -49,6 +59,19 @@
         </div>
         <div class="form-group">
             <button class="btn btn-primary" data-toggle="modal" data-target="#uploadProductModal">Загрузить прайс <i class="fa fa-plus fa-fw"></i></button>
+        </div>
+        <div class="form-group">
+            <form method="post">
+                <button class="btn btn-warning" name="updateImg" value="1">Обновить картнки <i class="fa fa-refresh fa-fw"></i></button>
+            </form>
+        </div>
+        <div class="form-group">
+            <form method="post">
+                <button class="btn btn-danger" name="downloadPrice" value="1">Выгрузить прайс <i class="fa fa-download fa-fw"></i></button>
+            </form>
+        </div>
+        <div class="form-group">
+            Ссылка на прайс <a href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
         </div>
         <!-- /.panel -->
     </div>

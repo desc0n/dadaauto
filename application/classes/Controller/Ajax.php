@@ -97,4 +97,28 @@ class Controller_Ajax extends Controller
         );
         $this->response->body($result);
     }
+
+    public function action_change_store_remain_quantity()
+    {
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        $result = json_encode([
+                'result' => $storeModel->setRemainQuantity((int)$this->request->post('id'), (int)$this->request->post('value'))
+        ]);
+
+        $this->response->body($result);
+    }
+
+    public function action_change_store_remain_price()
+    {
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        $result = json_encode([
+                'result' => $storeModel->setRemainPrice((int)$this->request->post('id'), (int)$this->request->post('value'))
+        ]);
+
+        $this->response->body($result);
+    }
 }

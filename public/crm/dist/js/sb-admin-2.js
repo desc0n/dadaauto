@@ -521,3 +521,15 @@ function showErrorModal(errorText, id) {
     $('#errorModalBody').html(errorText);
     $('#errorModal').modal();
 }
+
+function changeQuantity(id) {
+    var value = $('#changeQuantity' + id + ' .quantity-value').val();
+    
+    $.ajax({type: 'POST', url: '/ajax/change_store_remain_quantity', async: true, data:{id: id, value: value}});
+}
+
+function changePrice(id) {
+    var value = $('#changePrice' + id + ' .price-value').val();
+    
+    $.ajax({type: 'POST', url: '/ajax/change_store_remain_price', async: true, data:{id: id, value: value}});
+}

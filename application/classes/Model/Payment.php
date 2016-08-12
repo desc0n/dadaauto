@@ -82,4 +82,25 @@ class Model_Payment extends Kohana_Model
             ->as_array()
         ;
     }
+
+    /**
+     * @param int $price
+     * @return int
+     */
+    public function gitMarkupPrice($price)
+    {
+        $markup = DB::select()
+            ->from('products__distributors_markup')
+            ->where('price_limit', '>=', $price)
+            ->limit(1)
+            ->execute()
+            ->get('markup')
+        ;
+            
+        $markup = $markup === null ? 20 : (int)$markup;
+        
+        $price = round($price * ((100 + $markup) / 100));
+        
+        return $price;
+    }
 }

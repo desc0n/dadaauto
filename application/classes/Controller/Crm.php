@@ -319,9 +319,21 @@ class Controller_Crm extends Controller
         if (isset($_FILES['filename']) && count($_FILES['filename'])) {
             $storeModel->uploadProducts($_FILES['filename'], $this->request->post('distributor'));
 
-//            HTTP::redirect($this->request->referrer());
+            HTTP::redirect($this->request->referrer());
         }
 
+        if ($this->request->post('downloadPrice') == 1) {
+            $storeModel->downloadPrice();
+            
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if ($this->request->post('updateImg') == 1) {
+            $storeModel->updateImg();
+            
+            HTTP::redirect($this->request->referrer());
+        }
+        
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/store_products_list')

@@ -109,6 +109,41 @@ class Model_Store extends Kohana_Model
     }
 
     /**
+     * @param int $id
+     * @param int $quantity
+     * 
+     * @return string
+     */
+    public function setRemainQuantity($id, $quantity)
+    {
+        DB::update('store__remain')
+            ->set(['quantity' => $quantity])
+            ->where('id', '=', $id)
+            ->execute()
+        ;
+        
+        return 'success';
+    }
+
+
+    /**
+     * @param int $id
+     * @param int $price
+     *
+     * @return string
+     */
+    public function setRemainPrice($id, $price)
+    {
+        DB::update('store__remain')
+            ->set(['price' => $price])
+            ->where('id', '=', $id)
+            ->execute()
+        ;
+
+        return 'success';
+    }
+
+    /**
      * @param array $files
      * 
      * @return bool
@@ -117,6 +152,9 @@ class Model_Store extends Kohana_Model
     {
         /** @var Model_Admin $adminModel */
         $adminModel = Model::factory('Admin');
+
+        /** @var Model_Payment $paymentModel */
+        $paymentModel = Model::factory('Payment');
 
         $carMarks = $this->findAllCarMarks();
 
@@ -150,6 +188,7 @@ class Model_Store extends Kohana_Model
             $topBottom = $row['J'];
             $quantity = $row['L'] === 'в наличии' ? 1 : 0;
             $price = $row['N'];
+            $imgs = $row['R'];
 
             if (empty($carMark) || empty($carModel)) {
                 continue;
@@ -182,6 +221,8 @@ class Model_Store extends Kohana_Model
                 $chassisId = $this->getChassisId($modelId, $carChassis);
             }
 
+            $price = $paymentModel->gitMarkupPrice($price);
+            
             $addResult = $this->addRemain(
                 $carMark,
                 strtoupper(
@@ -212,36 +253,33 @@ class Model_Store extends Kohana_Model
 
             $productId = $addResult[1];
 
-            $count = DB::select()
-                ->from('products__cars')
-                ->where('product_id', '=', $productId)
-                ->limit(1)
+            DB::query(Database::INSERT,
+                'INSERT INTO `products__cars` 
+                (`product_id`, `mark_id`, `model_id`, `chassis_id`, `engine_id`, `marking`, `front_rear`, `left_right`, `top_bottom`)
+                VALUES (:productId, :markId, :modelId, :chassisId, :engineId, :marking, :frontRear, :leftRight, :topBottom)
+                ON DUPLICATE KEY UPDATE `marking` = :marking
+            ')
+                ->parameters([
+                    ':productId' => $productId,
+                    ':markId' => $markId,
+                    ':modelId' => $modelId,
+                    ':chassisId' => $chassisId,
+                    ':engineId' => $engineId,
+                    ':marking' => $marking,
+                    ':frontRear' => $frontRear,
+                    ':leftRight' => $leftRight,
+                    ':topBottom' => $topBottom
+                ])
                 ->execute()
-                ->count()
             ;
 
-            if ($count === 0) {
-                DB::insert('products__cars', [
-                        'product_id',
-                        'mark_id',
-                        'model_id',
-                        'chassis_id',
-                        'engine_id',
-                        'marking',
-                        'front_rear',
-                        'left_right',
-                        'top_bottom'
-                    ])
-                    ->values([
-                        $productId,
-                        $markId,
-                        $modelId,
-                        $chassisId,
-                        $engineId,
-                        $marking,
-                        $frontRear,
-                        $leftRight,
-                        $topBottom
+            $imgsArr = explode(';', $imgs);
+
+            foreach ($imgsArr as $src){
+                DB::query(Database::INSERT, 'INSERT INTO `products__imgs` (`product_id`, `src`) VALUES(:productId, :src) ON DUPLICATE KEY UPDATE `src` = :src')
+                    ->parameters([
+                        ':productId' => $productId,
+                        ':src' => $src
                     ])
                     ->execute()
                 ;
@@ -423,5 +461,114 @@ class Model_Store extends Kohana_Model
             ->execute()
             ->current()
         ;
+    }
+
+    public function downloadPrice()
+    {
+        $file = fopen('public/prices/download/price.csv', 'w');
+
+        $data = DB::select(
+                'sr.*',
+                ['pb.name', 'brand_name'],
+                'p.article',
+                ['p.name', 'product_name'],
+                ['cmarks.name', 'car_mark_name'],
+                ['cm.name', 'car_model_name'],
+                ['cc.name', 'car_chassis_name'],
+                ['ce.name', 'car_engine_name'],
+                'pc.front_rear',
+                'pc.left_right',
+                'pc.top_bottom',
+                [DB::select([DB::expr('GROUP_CONCAT(pi.local_src SEPARATOR \';\')'), 'imgs'])->from(['products__imgs', 'pi'])->where('pi.product_id', '=', DB::expr('sr.product_id')), 'imgs']
+            )
+            ->from(['store__remain', 'sr'])
+            ->join(['products', 'p'])
+            ->on('p.id', '=', 'sr.product_id')
+            ->join(['products__brands', 'pb'])
+            ->on('pb.id', '=', 'p.brand_id')
+            ->join(['products__cars', 'pc'])
+            ->on('pc.product_id', '=', 'sr.product_id')
+            ->join(['cars__marks', 'cmarks'], 'LEFT')
+            ->on('cmarks.id', '=', 'pc.mark_id')
+            ->join(['cars__models', 'cm'], 'LEFT')
+            ->on('cm.id', '=', 'pc.model_id')
+            ->join(['cars__chassis', 'cc'], 'LEFT')
+            ->on('cc.id', '=', 'pc.chassis_id')
+            ->join(['cars__engines', 'ce'], 'LEFT')
+            ->on('ce.id', '=', 'pc.engine_id')
+            ->where('sr.quantity', '>', 0)
+            ->and_where('sr.price', '>', 0)
+            ->execute()
+            ->as_array()
+        ;
+
+        foreach ($data as $row) {
+            $string = $row['product_name']
+                . ';' . $row['car_mark_name']
+                . ';' . $row['car_model_name']
+                . ';' . $row['car_chassis_name']
+                . ';' . $row['car_engine_name']
+                . ';' . ';'
+                . ';' . $row['front_rear']
+                . ';' . $row['left_right']
+                . ';' . $row['top_bottom']
+                . ';' . ';'
+                . ';' . $row['imgs']
+                . chr(10)
+            ;
+            $string = mb_detect_encoding($string) == 'UTF-8' ? mb_convert_encoding($string, 'CP-1251') : $string;
+
+            fwrite($file, $string);
+        }
+
+        fclose($file);
+    }
+
+    public function updateImg()
+    {
+        $imgs = DB::select()
+            ->from('products__imgs')
+            ->where('local_src', 'IS', NULL)
+            ->execute()
+            ->as_array()
+        ;
+        
+        foreach ($imgs as $img) {
+            $this->setLocalImg($img['id'], $img['src']);
+        }
+    }
+    
+    /**
+     * @param int $id
+     * @param string $url
+     * 
+     * @throws Kohana_Exception
+     */
+    public function setLocalImg($id, $url)
+    {
+        $file_name = 'public/img/original/'.$id.'.jpg';
+        
+        if (copy($url, $file_name))	{
+            $watermark = Image::factory('public/i/watermark.jpg');
+
+            $image = Image::factory($file_name);
+            $image->resize(500, NULL);
+            $image->watermark($watermark, 425, 230);
+            $image->save($file_name, 100);
+
+            $thumb_file_name = 'public/img/thumb/'.$id.'.jpg';
+
+            if (copy($file_name, $thumb_file_name))	{
+                $thumb_image = Image::factory($thumb_file_name);
+                $thumb_image->resize(200, NULL);
+                $thumb_image->save($thumb_file_name, 100);
+
+                DB::update('products__imgs')
+                    ->set(['local_src' => 'http://'. $_SERVER['HTTP_HOST'] . '/' . $file_name])
+                    ->where('id', '=', $id)
+                    ->execute()
+                ;
+            }
+        }
     }
 }
