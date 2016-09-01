@@ -87,6 +87,9 @@
                             <li>
                                 <a href="/crm/store_remain">Остатки</a>
                             </li>
+                            <li>
+                                <a href="/crm/price">Загрузка прайса</a>
+                            </li>
                         </ul>
                     </li>
                     <li>

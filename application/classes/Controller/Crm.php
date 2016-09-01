@@ -343,7 +343,58 @@ class Controller_Crm extends Controller
         ;
         $this->response->body($template);
     }
-    
+
+    public function action_price()
+    {
+        /** @var Model_Product $productModel */
+        $productModel = Model::factory('Product');
+
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        if ($this->request->post('name') !== null) {
+            $storeModel->addRemain(
+                $this->request->post('brand'),
+                $this->request->post('article'),
+                $this->request->post('name'),
+                $this->request->post('quantity'),
+                $this->request->post('price'),
+                $this->request->post('distributor_id'),
+                $this->request->post('product_type'),
+                $this->request->post('place')
+            );
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (isset($_FILES['filename']) && count($_FILES['filename'])) {
+            $storeModel->uploadProducts($_FILES['filename'], $this->request->post('distributor'));
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if ($this->request->post('downloadPrice') == 1) {
+            $storeModel->downloadPrice();
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if ($this->request->post('updateImg') == 1) {
+            $storeModel->updateImg();
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/price')
+            ->set('distributorsData', $productModel->findDistributors())
+            ->set('productsType', $storeModel->productsType)
+            ->set('priceData', $storeModel->getPriceFormatData())
+        ;
+        $this->response->body($template);
+    }
+
     public function action_store_distributors()
     {
         /** @var Model_Product $productModel */

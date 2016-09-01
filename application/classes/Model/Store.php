@@ -463,24 +463,25 @@ class Model_Store extends Kohana_Model
         ;
     }
 
-    public function downloadPrice()
+    /**
+     * @return array
+     */
+    public function getPriceFormatData()
     {
-        $file = fopen('public/prices/download/price.csv', 'w');
-
-        $data = DB::select(
-                'sr.*',
-                ['pb.name', 'brand_name'],
-                'p.article',
-                ['p.name', 'product_name'],
-                ['cmarks.name', 'car_mark_name'],
-                ['cm.name', 'car_model_name'],
-                ['cc.name', 'car_chassis_name'],
-                ['ce.name', 'car_engine_name'],
-                'pc.front_rear',
-                'pc.left_right',
-                'pc.top_bottom',
-                [DB::select([DB::expr('GROUP_CONCAT(pi.local_src SEPARATOR \';\')'), 'imgs'])->from(['products__imgs', 'pi'])->where('pi.product_id', '=', DB::expr('sr.product_id')), 'imgs']
-            )
+        return DB::select(
+            'sr.*',
+            ['pb.name', 'brand_name'],
+            'p.article',
+            ['p.name', 'product_name'],
+            ['cmarks.name', 'car_mark_name'],
+            ['cm.name', 'car_model_name'],
+            ['cc.name', 'car_chassis_name'],
+            ['ce.name', 'car_engine_name'],
+            'pc.front_rear',
+            'pc.left_right',
+            'pc.top_bottom',
+            [DB::select([DB::expr('GROUP_CONCAT(pi.local_src SEPARATOR \';\')'), 'imgs'])->from(['products__imgs', 'pi'])->where('pi.product_id', '=', DB::expr('sr.product_id')), 'imgs']
+        )
             ->from(['store__remain', 'sr'])
             ->join(['products', 'p'])
             ->on('p.id', '=', 'sr.product_id')
@@ -498,9 +499,20 @@ class Model_Store extends Kohana_Model
             ->on('ce.id', '=', 'pc.engine_id')
             ->where('sr.quantity', '>', 0)
             ->and_where('sr.price', '>', 0)
+            ->and_where('sr.type', '=', 'price')
             ->execute()
             ->as_array()
         ;
+    }
+
+    /**
+     * @return void
+     */
+    public function downloadPrice()
+    {
+        $file = fopen('public/prices/download/price.csv', 'w');
+
+        $data = $this->getPriceFormatData();
 
         foreach ($data as $row) {
             $string = $row['product_name']
