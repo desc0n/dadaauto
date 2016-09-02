@@ -390,7 +390,7 @@ $(function() {
             return false;
         }
         
-        if($('#uploadProductModal #distributor').val() == 0) {
+        if($('#uploadProductModal #distributor').val() === 0) {
             alert('Не выбран поставщик!');
             
             return false;
@@ -532,4 +532,11 @@ function changePrice(id) {
     var value = $('#changePrice' + id + ' .price-value').val();
     
     $.ajax({type: 'POST', url: '/ajax/change_store_remain_price', async: true, data:{id: id, value: value}});
+}
+
+function zeroPrice(id) {
+    $.ajax({type: 'POST', url: '/ajax/zero_price', async: true})
+        .done(function () {
+            location.reload();
+        });
 }

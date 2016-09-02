@@ -121,4 +121,16 @@ class Controller_Ajax extends Controller
 
         $this->response->body($result);
     }
+    
+    public function action_zero_price()
+    {
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        $result = json_encode([
+                'result' => $storeModel->zeroPrice()
+        ]);
+
+        $this->response->body($result);
+    }
 }

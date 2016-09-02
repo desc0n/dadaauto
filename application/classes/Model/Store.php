@@ -4,10 +4,27 @@ class Model_Store extends Kohana_Model
 {
     const PRODUCT_TYPE_NEW = 'new';
     const PRODUCT_TYPE_CONTRACT = 'contract';
+    const PRODUCT_TYPE_PRICE = 'price';
 
     public $productsType = [
-        self::PRODUCT_TYPE_NEW           => 'Новая',
-        self::PRODUCT_TYPE_CONTRACT      => 'Контрактная'
+        self::PRODUCT_TYPE_NEW              => 'Новая',
+        self::PRODUCT_TYPE_CONTRACT         => 'Контрактная',
+        self::PRODUCT_TYPE_PRICE            => 'Из прайса'
+    ];
+
+    public $mainFieldKey = [
+        1 => 'Наименование',
+        2 => 'Марка',
+        3 => 'Модель',
+        4 => 'Двигатель',
+        5 => 'Кузов',
+        6 => 'Маркировка',
+        7 => 'Перез/зад',
+        8 => 'Право/лево',
+        9 => 'Верх/низ',
+        10 => 'Наличие',
+        11 => 'Цена',
+        12 => 'Изображение'
     ];
 
     /**
@@ -150,12 +167,6 @@ class Model_Store extends Kohana_Model
      */
     public function uploadProducts($files, $distributorId)
     {
-        /** @var Model_Admin $adminModel */
-        $adminModel = Model::factory('Admin');
-
-        /** @var Model_Payment $paymentModel */
-        $paymentModel = Model::factory('Payment');
-
         $carMarks = $this->findAllCarMarks();
 
         $inputFileName = sprintf('public/prices/%s', $files['name']);
@@ -172,118 +183,133 @@ class Model_Store extends Kohana_Model
 
         $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
+        $priceFields = $this->getPriceFields();
+
         foreach ($sheetData as $i => $row) {
             if ($i == 1) {
                 continue;
             }
 
-            $name = $row['B'];
-            $carMark = $row['C'];
-            $carModel = $row['D'];
-            $carEngine = $row['E'];
-            $carChassis = $row['F'];
-            $marking = $row['G'];
-            $frontRear = $row['H'];
-            $leftRight = $row['I'];
-            $topBottom = $row['J'];
-            $quantity = $row['L'] === 'в наличии' ? 1 : 0;
-            $price = $row['N'];
-            $imgs = $row['R'];
+            $this->uploadMainField($row, $distributorId, $carMarks, $priceFields);
+        }
 
-            if (empty($carMark) || empty($carModel)) {
-                continue;
-            }
+        return true;
+    }
 
-            if (!in_array($carMark, $carMarks)) {
-                $newMark = DB::insert('cars__marks', ['name'])
-                    ->values([$carMark])
-                    ->execute()
-                ;
+    public function uploadMainField($data, $distributorId, $carMarks, $priceFields)
+    {
+        /** @var Model_Admin $adminModel */
+        $adminModel = Model::factory('Admin');
 
-                $markId = Arr::get($newMark, 0);
+        /** @var Model_Payment $paymentModel */
+        $paymentModel = Model::factory('Payment');
 
-                $carMarks[] = $carMark;
-            } else {
-                $markId = array_search($carMark, $carMarks);
-            }
+        $name = Arr::get($data, $priceFields[1]['column']);
+        $carMark = Arr::get($data, $priceFields[2]['column']);
+        $carModel = Arr::get($data, $priceFields[3]['column']);
+        $carEngine = Arr::get($data, $priceFields[4]['column']);
+        $carChassis = Arr::get($data, $priceFields[5]['column']);
+        $marking = Arr::get($data, $priceFields[6]['column']);
+        $frontRear = Arr::get($data, $priceFields[7]['column']);
+        $leftRight = Arr::get($data, $priceFields[8]['column']);
+        $topBottom = Arr::get($data, $priceFields[9]['column']);
+        $quantity = Arr::get($data, $priceFields[10]['column']) === 'в наличии' ? 1 : Arr::get($data, $priceFields[10]['column']);
+        $price = Arr::get($data, $priceFields[11]['column']);
+        $imgs = Arr::get($data, $priceFields[12]['column']);
 
-            $modelId = $this->getModelId($markId, $carModel);
+        if (empty($carMark) || empty($carModel)) {
+            return false;
+        }
 
-            $engineId = null;
+        if (!in_array($carMark, $carMarks)) {
+            $newMark = DB::insert('cars__marks', ['name'])
+                ->values([$carMark])
+                ->execute()
+            ;
 
-            if (!empty($carEngine)) {
-                $engineId = $this->getEngineId($modelId, $carEngine);
-            }
+            $markId = Arr::get($newMark, 0);
 
-            $chassisId = null;
+            $carMarks[] = $carMark;
+        } else {
+            $markId = array_search($carMark, $carMarks);
+        }
 
-            if (!empty($carChassis)) {
-                $chassisId = $this->getChassisId($modelId, $carChassis);
-            }
+        $modelId = $this->getModelId($markId, $carModel);
 
-            $price = $paymentModel->gitMarkupPrice($price);
-            
-            $addResult = $this->addRemain(
-                $carMark,
-                strtoupper(
-                    $adminModel->slugify(
-                        sprintf(
-                            '%s_%s%s%s%s',
-                            $carModel,
-                            $name,
-                            !empty($frontRear) ? '_'. $frontRear : null,
-                            !empty($leftRight) ? '_'. $leftRight : null,
-                            !empty($topBottom) ? '_'. $topBottom : null
-                        )
+        $engineId = null;
+
+        if (!empty($carEngine)) {
+            $engineId = $this->getEngineId($modelId, $carEngine);
+        }
+
+        $chassisId = null;
+
+        if (!empty($carChassis)) {
+            $chassisId = $this->getChassisId($modelId, $carChassis);
+        }
+
+        $price = $paymentModel->gitMarkupPrice($price);
+
+        $addResult = $this->addRemain(
+            $carMark,
+            strtoupper(
+                $adminModel->slugify(
+                    sprintf(
+                        '%s_%s%s%s%s',
+                        $carModel,
+                        $name,
+                        !empty($frontRear) ? '_'. $frontRear : null,
+                        !empty($leftRight) ? '_'. $leftRight : null,
+                        !empty($topBottom) ? '_'. $topBottom : null
                     )
-                ),
-                sprintf(
-                    '%s %s %s %s',
-                    $name,
-                    $carMark,
-                    $carModel,
-                    $carChassis
-                ),
-                $quantity,
-                $price,
-                $distributorId,
-                self::PRODUCT_TYPE_CONTRACT,
-                ''
-            );
+                )
+            ),
+            sprintf(
+                '%s %s %s %s',
+                $name,
+                $carMark,
+                $carModel,
+                $carChassis
+            ),
+            $quantity,
+            $price,
+            $distributorId,
+            self::PRODUCT_TYPE_PRICE,
+            ''
+        );
 
-            $productId = $addResult[1];
+        $productId = $addResult[1];
 
-            DB::query(Database::INSERT,
-                'INSERT INTO `products__cars` 
+        DB::query(Database::INSERT,
+            'INSERT INTO `products__cars` 
                 (`product_id`, `mark_id`, `model_id`, `chassis_id`, `engine_id`, `marking`, `front_rear`, `left_right`, `top_bottom`)
                 VALUES (:productId, :markId, :modelId, :chassisId, :engineId, :marking, :frontRear, :leftRight, :topBottom)
                 ON DUPLICATE KEY UPDATE `marking` = :marking
             ')
+            ->parameters([
+                ':productId' => $productId,
+                ':markId' => $markId,
+                ':modelId' => $modelId,
+                ':chassisId' => $chassisId,
+                ':engineId' => $engineId,
+                ':marking' => $marking,
+                ':frontRear' => $frontRear,
+                ':leftRight' => $leftRight,
+                ':topBottom' => $topBottom
+            ])
+            ->execute()
+        ;
+
+        $imgsArr = explode(';', $imgs);
+
+        foreach ($imgsArr as $src){
+            DB::query(Database::INSERT, 'INSERT INTO `products__imgs` (`product_id`, `src`) VALUES(:productId, :src) ON DUPLICATE KEY UPDATE `src` = :src')
                 ->parameters([
                     ':productId' => $productId,
-                    ':markId' => $markId,
-                    ':modelId' => $modelId,
-                    ':chassisId' => $chassisId,
-                    ':engineId' => $engineId,
-                    ':marking' => $marking,
-                    ':frontRear' => $frontRear,
-                    ':leftRight' => $leftRight,
-                    ':topBottom' => $topBottom
+                    ':src' => $src
                 ])
                 ->execute()
             ;
-
-            $imgsArr = explode(';', $imgs);
-
-            foreach ($imgsArr as $src){
-                DB::query(Database::INSERT, 'INSERT INTO `products__imgs` (`product_id`, `src`) VALUES(:productId, :src) ON DUPLICATE KEY UPDATE `src` = :src')
-                    ->parameters([
-                        ':productId' => $productId,
-                        ':src' => $src
-                    ])
-                    ->execute()
-                ;
-            }
         }
 
         return true;
@@ -582,5 +608,33 @@ class Model_Store extends Kohana_Model
                 ;
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPriceFields()
+    {
+        $data = [];
+
+        $res = DB::select()
+            ->from('prices__fields')
+            ->execute()
+            ->as_array()
+        ;
+
+        foreach ($res as $row) {
+            $data[$row['id']] = $row;
+        }
+
+        return $data;
+    }
+
+    public function zeroPrice()
+    {
+        DB::delete('store__remain')
+            ->where('type', '=', self::PRODUCT_TYPE_PRICE)
+            ->execute()
+        ;
     }
 }

@@ -352,23 +352,8 @@ class Controller_Crm extends Controller
         /** @var Model_Store $storeModel */
         $storeModel = Model::factory('Store');
 
-        if ($this->request->post('name') !== null) {
-            $storeModel->addRemain(
-                $this->request->post('brand'),
-                $this->request->post('article'),
-                $this->request->post('name'),
-                $this->request->post('quantity'),
-                $this->request->post('price'),
-                $this->request->post('distributor_id'),
-                $this->request->post('product_type'),
-                $this->request->post('place')
-            );
-
-            HTTP::redirect($this->request->referrer());
-        }
-
         if (isset($_FILES['filename']) && count($_FILES['filename'])) {
-            $storeModel->uploadProducts($_FILES['filename'], $this->request->post('distributor'));
+            $storeModel->uploadProducts($_FILES['filename'], null);
 
             HTTP::redirect($this->request->referrer());
         }
@@ -391,6 +376,7 @@ class Controller_Crm extends Controller
             ->set('distributorsData', $productModel->findDistributors())
             ->set('productsType', $storeModel->productsType)
             ->set('priceData', $storeModel->getPriceFormatData())
+            ->set('priceFields', $storeModel->getPriceFields())
         ;
         $this->response->body($template);
     }

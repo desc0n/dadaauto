@@ -57,22 +57,6 @@
         <div class="form-group">
             <button class="btn btn-success" data-toggle="modal" data-target="#addStoreProductModal">Добавить товар <i class="fa fa-plus fa-fw"></i></button>
         </div>
-        <div class="form-group">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#uploadProductModal">Загрузить прайс <i class="fa fa-plus fa-fw"></i></button>
-        </div>
-        <div class="form-group">
-            <form method="post">
-                <button class="btn btn-warning" name="updateImg" value="1">Обновить картнки <i class="fa fa-refresh fa-fw"></i></button>
-            </form>
-        </div>
-        <div class="form-group">
-            <form method="post">
-                <button class="btn btn-danger" name="downloadPrice" value="1">Выгрузить прайс <i class="fa fa-download fa-fw"></i></button>
-            </form>
-        </div>
-        <div class="form-group">
-            Ссылка на прайс <a download href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
-        </div>
         <!-- /.panel -->
     </div>
     <!-- /.col-lg-12 -->
