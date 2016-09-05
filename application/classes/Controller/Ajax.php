@@ -133,4 +133,20 @@ class Controller_Ajax extends Controller
 
         $this->response->body($result);
     }
+
+    public function action_redact_price_field()
+    {
+        /** @var Model_Store $storeModel */
+        $storeModel = Model::factory('Store');
+
+        $result = json_encode([
+                'result' => $storeModel->redactPriceField(
+                    $this->request->post('id'),
+                    $this->request->post('name'),
+                    $this->request->post('column')
+                )
+        ]);
+
+        $this->response->body($result);
+    }
 }

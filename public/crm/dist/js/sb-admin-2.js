@@ -540,3 +540,16 @@ function zeroPrice(id) {
             location.reload();
         });
 }
+
+function redactPriceField(id) {
+    $.ajax({
+        type: 'POST', 
+        url: '/ajax/redact_price_field', 
+        async: true, 
+        data:{id: id, name: $('#priceField' + id + ' .price-field-name').val(), column: $('#priceField' + id + ' .price-field-column').val()}
+    })
+    .done(function () {
+        location.reload();
+    })
+    ;
+}

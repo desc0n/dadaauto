@@ -99,7 +99,9 @@
                         </td>
                         <td class="text-center">
                             <button class="btn btn-success" onclick="redactPriceField(<?=$field['id'];?>);"><i class="fa fa-check fa-fw"></i></button>
-                            <button class="btn btn-danger"><i class="fa fa-remove fa-fw"></i></button>
+                            <?if ((int)$field['redact'] === 1) {?>
+                                <button class="btn btn-danger"><i class="fa fa-remove fa-fw"></i></button>
+                            <?}?>
                         </td>
                     </tr>
                     <?}?>
@@ -112,7 +114,6 @@
                         </td>
                         <td class="text-center">
                             <button class="btn btn-success" onclick="redactPriceField(0);"><i class="fa fa-check fa-fw"></i></button>
-                            <button class="btn btn-danger"><i class="fa fa-remove fa-fw"></i></button>
                         </td>
                     </tr>
                 </table>

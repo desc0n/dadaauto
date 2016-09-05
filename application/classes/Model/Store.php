@@ -637,4 +637,13 @@ class Model_Store extends Kohana_Model
             ->execute()
         ;
     }
+
+    public function redactPriceField($id, $name, $column)
+    {
+        DB::update('prices__fields')
+            ->set(['name' => $name, 'column' => $column])
+            ->where('id', '=', $id)
+            ->execute()
+        ;
+    }
 }
