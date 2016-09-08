@@ -178,10 +178,11 @@ class Model_Store extends Kohana_Model
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objReader->setDelimiter(';');
         $objReader->setInputEncoding('Windows-1251');
+        $objReader->setReadDataOnly(true);
 
         $objPHPExcel = $objReader->load($inputFileName);
 
-        $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+        $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,false);
 
         $priceFields = $this->getPriceFields();
 
@@ -204,18 +205,18 @@ class Model_Store extends Kohana_Model
         /** @var Model_Payment $paymentModel */
         $paymentModel = Model::factory('Payment');
 
-        $name = Arr::get($data, $priceFields[1]['column']);
-        $carMark = Arr::get($data, $priceFields[2]['column']);
-        $carModel = Arr::get($data, $priceFields[3]['column']);
-        $carEngine = Arr::get($data, $priceFields[4]['column']);
-        $carChassis = Arr::get($data, $priceFields[5]['column']);
-        $marking = Arr::get($data, $priceFields[6]['column']);
-        $frontRear = Arr::get($data, $priceFields[7]['column']);
-        $leftRight = Arr::get($data, $priceFields[8]['column']);
-        $topBottom = Arr::get($data, $priceFields[9]['column']);
-        $quantity = Arr::get($data, $priceFields[10]['column']) === 'в наличии' ? 1 : Arr::get($data, $priceFields[10]['column']);
-        $price = Arr::get($data, $priceFields[11]['column']);
-        $imgs = Arr::get($data, $priceFields[12]['column']);
+        $name = Arr::get($data, ($priceFields[1]['column'] - 1));
+        $carMark = Arr::get($data, ($priceFields[2]['column'] - 1));
+        $carModel = Arr::get($data, ($priceFields[3]['column'] - 1));
+        $carEngine = Arr::get($data, ($priceFields[4]['column'] - 1));
+        $carChassis = Arr::get($data, ($priceFields[5]['column'] - 1));
+        $marking = Arr::get($data, ($priceFields[6]['column'] - 1));
+        $frontRear = Arr::get($data, ($priceFields[7]['column'] - 1));
+        $leftRight = Arr::get($data, ($priceFields[8]['column'] - 1));
+        $topBottom = Arr::get($data, ($priceFields[9]['column'] - 1));
+        $quantity = Arr::get($data, ($priceFields[10]['column']) - 1) === 'в наличии' ? 1 : Arr::get($data, ($priceFields[10]['column'] - 1));
+        $price = Arr::get($data, ($priceFields[11]['column'] - 1));
+        $imgs = Arr::get($data, ($priceFields[12]['column'] - 1));
 
         if (empty($carMark) || empty($carModel)) {
             return false;
