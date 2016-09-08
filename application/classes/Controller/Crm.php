@@ -593,4 +593,46 @@ class Controller_Crm extends Controller
 
         $this->response->body($template);
     }
+    
+    public function action_site_reviews()
+    {
+        /** @var $adminModel Model_Admin */
+        $adminModel = Model::factory('Admin');
+        
+        if (isset($_POST['unshowreview'])) {
+            $adminModel->setReview([
+                'id' => $this->request->post('unshowreview'),
+                'status' => 0
+            ]);
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (isset($_POST['deletereview'])) {
+            $adminModel->removeReview([
+                'id' => $this->request->post('deletereview'),
+            ]);
+
+            HTTP::redirect($this->request->referrer());
+        }
+
+        if (isset($_POST['showreview'])) {
+            $adminModel->setReview([
+                'id' => $this->request->post('showreview'),
+                'status' => 1
+            ]);
+            
+            HTTP::redirect($this->request->referrer());
+        }
+
+        $template = $this->getBaseTemplate();
+
+        $template->content = View::factory('crm/site_reviews')
+            ->set('showedReviewsData', $adminModel->findReviews(['status' => 1]))
+            ->set('unshowedReviewsData', $adminModel->findReviews(['status' => 0]))
+            ->set('get', $this->request->query())
+        ;
+
+        $this->response->body($template);
+    }
 }
