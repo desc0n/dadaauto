@@ -594,7 +594,7 @@ class Model_Store extends Kohana_Model
     {
         $file_name = 'public/img/original/'.$id.'.jpg';
         
-        if (copy($url, $file_name))	{
+        if (!empty($file_name) && copy($url, $file_name))	{
             $watermark = Image::factory('public/i/watermark.jpg');
 
             $image = Image::factory($file_name);
