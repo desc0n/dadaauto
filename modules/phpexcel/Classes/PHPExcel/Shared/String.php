@@ -493,7 +493,7 @@ class PHPExcel_Shared_String
 	public static function ConvertEncoding($value, $to, $from)
 	{
 		if (self::getIsIconvEnabled()) {
-			return iconv($from, $to, $value);
+            return mb_detect_encoding($value, $from) ? mb_convert_encoding($value, $to) : $value;
 		}
 
 		if (self::getIsMbstringEnabled()) {

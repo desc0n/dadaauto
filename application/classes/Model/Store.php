@@ -173,11 +173,15 @@ class Model_Store extends Kohana_Model
 
         copy($files['tmp_name'], $inputFileName);
 
-        $inputFileType = 'CSV';
+        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-        $objReader->setDelimiter(';');
-        $objReader->setInputEncoding('Windows-1251');
+
+        if ($inputFileType === 'CSV') {
+            $objReader->setDelimiter(';');
+            $objReader->setInputEncoding('Windows-1251');
+        }
+
         $objReader->setReadDataOnly(true);
 
         $objPHPExcel = $objReader->load($inputFileName);
@@ -186,8 +190,12 @@ class Model_Store extends Kohana_Model
 
         $priceFields = $this->getPriceFields();
 
-        foreach ($sheetData as $i => $row) {
-            if ($i == 1) {
+        $i = 0;
+
+        foreach ($sheetData as $row) {
+            $i++;
+
+            if ($i === 1) {
                 continue;
             }
 
@@ -196,6 +204,7 @@ class Model_Store extends Kohana_Model
 
         return true;
     }
+
 
     public function uploadMainField($data, $distributorId, $carMarks, $priceFields)
     {
@@ -214,7 +223,7 @@ class Model_Store extends Kohana_Model
         $frontRear = Arr::get($data, ($priceFields[7]['column'] - 1));
         $leftRight = Arr::get($data, ($priceFields[8]['column'] - 1));
         $topBottom = Arr::get($data, ($priceFields[9]['column'] - 1));
-        $quantity = Arr::get($data, ($priceFields[10]['column']) - 1) === 'в наличии' ? 1 : Arr::get($data, ($priceFields[10]['column'] - 1));
+        $quantity = Arr::get($data, ($priceFields[10]['column'] - 1), 1) === 'в наличии' ? 1 : Arr::get($data, ($priceFields[10]['column'] - 1), 1);
         $price = Arr::get($data, ($priceFields[11]['column'] - 1));
         $imgs = Arr::get($data, ($priceFields[12]['column'] - 1));
 
@@ -524,9 +533,7 @@ class Model_Store extends Kohana_Model
             ->on('cc.id', '=', 'pc.chassis_id')
             ->join(['cars__engines', 'ce'], 'LEFT')
             ->on('ce.id', '=', 'pc.engine_id')
-            ->where('sr.quantity', '>', 0)
-            ->and_where('sr.price', '>', 0)
-            ->and_where('sr.type', '=', 'price')
+            ->where('sr.type', '=', 'price')
             ->execute()
             ->as_array()
         ;
