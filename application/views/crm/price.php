@@ -18,6 +18,7 @@
                         <?
 
                         $i = 1;
+                        $limit = 25;
                         $keys = array_keys($priceData);
 
                         foreach ($priceData as $key => $dataRow) {
@@ -32,13 +33,19 @@
                             }
                         }
 
-                        foreach ($priceData as $dataRow) {?>
+                        foreach ($priceData as $dataRow) {
+                            if ($limit < 0) {
+                                break;
+                            }
+                            ?>
                             <tr>
                             <?foreach ($dataRow as $value) {?>
                                 <td><?=mb_substr($value, 0, 5);?>...</td>
                             <?}?>
                             </tr>
-                        <?}?>
+                            <?
+                            $limit--;
+                        }?>
                         </tbody>
                     </table>
                 </div>
