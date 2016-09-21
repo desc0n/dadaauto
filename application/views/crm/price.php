@@ -14,29 +14,29 @@
             <div class="panel-body">
                 <div class="dataTable_wrapper">
                     <table class="table table-striped table-bordered table-hover price-data-table" id="dataTables-example">
-                        <thead>
-                            <tr>
-                                <th>Название</th>
-                                <th>Марка авто</th>
-                                <th>Модель авто</th>
-                                <th>Кузов / шасси</th>
-                                <th>Двигатель</th>
-                                <th>Перед / Зад</th>
-                                <th>Лево / Право</th>
-                                <th>Верх / Низ</th>
-                            </tr>
-                        </thead>
                         <tbody>
-                        <?foreach ($priceData as $data) {?>
+                        <?
+
+                        $i = 1;
+                        $keys = array_keys($priceData);
+
+                        foreach ($priceData as $key => $dataRow) {
+                            if ($key !== $keys[0]) {
+                                break;
+                            }
+
+                            foreach ($dataRow as $value) {
+                                echo '<th class="text-center">' . $i . '</th>';
+
+                                $i++;
+                            }
+                        }
+
+                        foreach ($priceData as $dataRow) {?>
                             <tr>
-                                <td><?=$data['product_name'];?></td>
-                                <td><?=$data['car_mark_name'];?></td>
-                                <td><?=$data['car_model_name'];?></td>
-                                <td><?=$data['car_chassis_name'];?></td>
-                                <td><?=$data['car_engine_name'];?></td>
-                                <td><?=$data['front_rear'];?></td>
-                                <td><?=$data['left_right'];?></td>
-                                <td><?=$data['top_bottom'];?></td>
+                            <?foreach ($dataRow as $value) {?>
+                                <td><?=mb_substr($value, 0, 5);?>...</td>
+                            <?}?>
                             </tr>
                         <?}?>
                         </tbody>
@@ -46,24 +46,37 @@
             </div>
             <!-- /.panel-body -->
         </div>
-        <div class="form-group">
-            <button class="btn btn-danger" onclick="zeroPrice();">Обнулить прайс <i class="fa fa-ban fa-fw"></i></button>
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <div class="col-lg-2">
+                    <button class="btn btn-danger" onclick="zeroPrice();">Обнулить <i class="fa fa-ban fa-fw"></i> <i class="fa fa-long-arrow-right fa-fw"></i></button>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadProductModal">Загрузить <i class="fa fa-plus fa-fw"></i> <i class="fa fa-long-arrow-right fa-fw"></i></button>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <form method="post">
+                        <button class="btn btn-default" name="uploadPrice" value="1">Изменить по настройкам<i class="fa fa-wrench fa-fw"></i> <i class="fa fa-long-arrow-right fa-fw"></i></button>
+                    </form>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <form method="post">
+                        <button class="btn btn-warning" name="updateImg" value="1">Обновить фото <i class="fa fa-refresh fa-fw"></i> <i class="fa fa-long-arrow-right fa-fw"></i></button>
+                    </form>
+                </div>
+                <div class="col-lg-2">
+                    <form method="post">
+                        <button class="btn btn-success" name="downloadPrice" value="1">Выгрузить прайс <i class="fa fa-download fa-fw"></i></button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#uploadProductModal">Загрузить прайс <i class="fa fa-plus fa-fw"></i></button>
-        </div>
-        <div class="form-group">
-            <form method="post">
-                <button class="btn btn-warning" name="updateImg" value="1">Обновить картнки <i class="fa fa-refresh fa-fw"></i></button>
-            </form>
-        </div>
-        <div class="form-group">
-            <form method="post">
-                <button class="btn btn-success" name="downloadPrice" value="1">Выгрузить прайс <i class="fa fa-download fa-fw"></i></button>
-            </form>
-        </div>
-        <div class="form-group">
-            Ссылка на прайс <a download href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    Ссылка на прайс <a download href="http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv">http://<?=$_SERVER['HTTP_HOST'];?>/public/prices/download/price.csv</a>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /.col-lg-12 -->

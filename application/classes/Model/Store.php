@@ -162,13 +162,12 @@ class Model_Store extends Kohana_Model
 
     /**
      * @param array $files
-     * 
+     * @param null|int $distributorId
+     *
      * @return bool
      */
     public function uploadProducts($files, $distributorId)
     {
-        $carMarks = $this->findAllCarMarks();
-
         $inputFileName = sprintf('public/prices/%s', $files['name']);
 
         copy($files['tmp_name'], $inputFileName);
@@ -188,8 +187,6 @@ class Model_Store extends Kohana_Model
 
         $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,false);
 
-        $priceFields = $this->getPriceFields();
-
         $i = 0;
 
         foreach ($sheetData as $row) {
@@ -199,13 +196,69 @@ class Model_Store extends Kohana_Model
                 continue;
             }
 
-            $this->uploadMainField($row, $distributorId, $carMarks, $priceFields);
+            $this->downloadRowPrices($row);
         }
 
         return true;
     }
 
+    /**
+     * @return bool
+     */
+    public function uploadPrice()
+    {
+        $carMarks = $this->findAllCarMarks();
 
+        $priceFields = $this->getPriceFields();
+
+        $res = DB::select()
+            ->from('prices__row')
+            ->execute()
+            ->as_array()
+        ;
+
+        foreach ($res as $row) {
+            $data = DB::select()
+                ->from('prices__row_data')
+                ->where('row_id', '=', $row['id'])
+                ->execute()
+                ->as_array('column', 'value')
+            ;
+
+            $this->uploadMainField($data, null, $carMarks, $priceFields);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function downloadRowPrices($data)
+    {
+        $result = DB::insert('prices__row', ['created_at'])
+            ->values([DB::expr('NOW()')])
+            ->execute()
+        ;
+
+        $rowId = $result[0];
+
+        foreach ($data as $column => $value) {
+            DB::insert('prices__row_data', ['row_id', 'column', 'value'])
+                ->values([$rowId, $column, $value])
+                ->execute()
+            ;
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param null|int $distributorId
+     * @param array $carMarks
+     * @param array $priceFields
+     *
+     * @return bool
+     */
     public function uploadMainField($data, $distributorId, $carMarks, $priceFields)
     {
         /** @var Model_Admin $adminModel */
@@ -231,17 +284,10 @@ class Model_Store extends Kohana_Model
             return false;
         }
 
-        if (!in_array($carMark, $carMarks)) {
-            $newMark = DB::insert('cars__marks', ['name'])
-                ->values([$carMark])
-                ->execute()
-            ;
+        $markId = array_search($carMark, $carMarks);
 
-            $markId = Arr::get($newMark, 0);
-
-            $carMarks[] = $carMark;
-        } else {
-            $markId = array_search($carMark, $carMarks);
+        if (!$markId) {
+            return false;
         }
 
         $modelId = $this->getModelId($markId, $carModel);
@@ -313,6 +359,10 @@ class Model_Store extends Kohana_Model
         $imgsArr = explode(';', $imgs);
 
         foreach ($imgsArr as $src){
+            if (empty($src)) {
+                continue;
+            }
+
             DB::query(Database::INSERT, 'INSERT INTO `products__imgs` (`product_id`, `src`) VALUES(:productId, :src) ON DUPLICATE KEY UPDATE `src` = :src')
                 ->parameters([
                     ':productId' => $productId,
@@ -540,6 +590,30 @@ class Model_Store extends Kohana_Model
     }
 
     /**
+     * @return array
+     */
+    public function getPriceRowData()
+    {
+        $res = DB::select()
+            ->from('prices__row_data')
+            ->execute()
+            ->as_array()
+        ;
+
+        $data = [];
+
+        foreach ($res as $row) {
+            if(!array_key_exists($row['row_id'], $data)) {
+                $data[$row['row_id']] = [];
+            }
+
+            $data[$row['row_id']][] = $row['value'];
+        }
+
+        return $data;
+    }
+
+    /**
      * @return void
      */
     public function downloadPrice()
@@ -644,6 +718,8 @@ class Model_Store extends Kohana_Model
             ->where('type', '=', self::PRODUCT_TYPE_PRICE)
             ->execute()
         ;
+
+        DB::delete('prices__row')->execute();
     }
 
     public function redactPriceField($id, $name, $column)

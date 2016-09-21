@@ -370,12 +370,19 @@ class Controller_Crm extends Controller
             HTTP::redirect($this->request->referrer());
         }
 
+
+        if ($this->request->post('uploadPrice') == 1) {
+            $storeModel->uploadPrice();
+
+            HTTP::redirect($this->request->referrer());
+        }
+
         $template = $this->getBaseTemplate();
 
         $template->content = View::factory('crm/price')
             ->set('distributorsData', $productModel->findDistributors())
             ->set('productsType', $storeModel->productsType)
-            ->set('priceData', $storeModel->getPriceFormatData())
+            ->set('priceData', $storeModel->getPriceRowData())
             ->set('priceFields', $storeModel->getPriceFields())
         ;
         $this->response->body($template);
