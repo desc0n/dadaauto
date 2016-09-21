@@ -18,7 +18,7 @@
                         <?
 
                         $i = 1;
-                        $limit = 25;
+                        $limit = 10;
                         $keys = array_keys($priceData);
 
                         foreach ($priceData as $key => $dataRow) {
